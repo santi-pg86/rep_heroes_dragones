@@ -28,6 +28,6 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 Pasa por encima de un corazón para recuperar 1 punto de ataque.
 
 ## 🚀 Ejecución
-'''
+```
 python rescatar_princesa.py
-'''
+```
