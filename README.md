@@ -24,8 +24,9 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 - **D** → Derecha
 - **E** → Ataque (solo arquero)
 
-## ❤️ Pociones
-Pasa por encima de un corazón para recuperar 1 punto de ataque.
+## 🛡️ Equipamiento
+- 🗡️ **Caballero**: recoge espadas para recuperar 1 ataque.
+- ➶ **Arquero**: recoge flechas para recuperar 1 ataque.
 
 ## 🚀 Ejecución
 ```
