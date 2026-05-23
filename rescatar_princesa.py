@@ -30,7 +30,7 @@ def cargar_mapa():
 
         if mapa[fila][columna] == '🌲':
         
-           mapa[fila][columna] = '❤️ '
+           mapa[fila][columna] = mi_municion
            pociones_en_mapa += 1
 
 def buscar_caballero():
@@ -43,14 +43,14 @@ def comprobar_movimiento(fila, columna):
 
     global ataques
 
-    if mi_personaje == '⚔️ ':
-        if mapa[fila][columna] == '❤️ ':
+    if mi_personaje == '⚔️':
+        if mapa[fila][columna] == mi_municion:
             ataques += 1
-            mapa[fila][columna] = '⚔️ '
+            mapa[fila][columna] = '⚔️'
             return mapa[fila][columna]
         elif mapa[fila][columna] == '🐉':
             if ataques > 0: # Me quedan ataques por realizar:
-                mapa[fila][columna] = '⚔️ '
+                mapa[fila][columna] = '⚔️'
                 ataques -= 1
             else:
                 mapa[fila][columna] = '☠️'
@@ -59,10 +59,10 @@ def comprobar_movimiento(fila, columna):
         elif mapa[fila][columna] == '👸':
             return '👸'
         else:
-            return '⚔️ '
+            return '⚔️'
         
     elif mi_personaje == '🏹':
-        if mapa[fila][columna] == '❤️ ':
+        if mapa[fila][columna] == mi_municion:
             ataques += 1
             mapa[fila][columna] = '🏹'
             return mapa[fila][columna]
@@ -172,7 +172,7 @@ def seleccionar_movimiento():
     global movimiento
     global ultimo_movimiento
 
-    if mi_personaje == '⚔️ ':
+    if mi_personaje == '⚔️':
         movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA): ')
     elif mi_personaje == '🏹':
         movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE): ')
@@ -194,6 +194,14 @@ def selector_dificultad():
         except ValueError:
             print('Debes introducir un número')
 
+def selector_municion():
+    if mi_personaje == '⚔️':
+        return '🗡️'
+    elif mi_personaje == '🏹':
+        return '➶'    
+    else:
+        return '❤️'
+
 ################################
 
 # mapa = [
@@ -204,7 +212,7 @@ def selector_dificultad():
 #     ['🌲', '🌲', '🌲','🌲','🌲']
 # ]
 
-lista_personajes = ('⚔️ ','🏹','🧙')
+lista_personajes = ('⚔️','🏹','🧙')
 
 print('¡Bienvenido héroe! Debes rescatar a la princesa pasando a través de feroces dragones.')
 print(lista_personajes[0],' : El caballero es un luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gastas un ataque por cada dragón derrotado.')
@@ -218,6 +226,7 @@ print('❤️: Si pasas sobre un corazón recuperas 1 punto de ataque')
 princesa_muerta = False
 
 mi_personaje = selector_de_personaje()
+mi_municion = selector_municion()
 
 if mi_personaje == '🧙':
     print('Se le abrirá el navegador para que introduzca sus datos bancarios y desbloquear el DLC')
