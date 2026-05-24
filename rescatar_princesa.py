@@ -438,7 +438,7 @@ else:
         tamano_mapa = 10
         num_dragones = 10
         municion_inicial  = 3
-        max_dragones_moviles  = 5
+        max_dragones_moviles  = 2
 
     max_municion = max_dragones_moviles // 2
 
