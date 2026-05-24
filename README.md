@@ -12,10 +12,20 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 - 🧙 **Mago**: bloqueado. Compra el DLC para desbloquearlo.
 
 ## 🗺️ Dificultad
-| Nivel | Mapa | Dragones | Pociones |
-|---|---|---|---|
-| 0 - Fácil | 5x5 | 5 | 1 |
-| 1 - Media | 10x10 | 10 | 3 |
+| Nivel | Mapa | Dragones | Munición inicial | Dragones móviles |
+|---|---|---|---|---|
+| 0 - Fácil | 5x5 | 5 | 1 | 1 |
+| 1 - Media | 10x10 | 10 | 3 | 2 |
+
+## 🐲 Dragones Móviles
+Además de los dragones estáticos, hay dragones móviles que se mueven por el mapa después de cada turno del héroe.
+
+- Se mueven aleatoriamente una casilla (arriba, abajo, izquierda o derecha).
+- Solo pueden moverse a casillas vacías 🌲, o hacia el héroe y la princesa.
+- Si el caballero tiene ataques cuando coinciden → el dragón muere.
+- El arquero muere siempre al contacto con un dragón móvil.
+- Si llegan a la princesa antes que el héroe → el héroe pierde.
+- Al morir un dragón móvil, se selecciona un nuevo dragón estático para reemplazarlo.
 
 ## 🕹️ Controles
 - **W** → Arriba
@@ -27,6 +37,12 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 ## 🛡️ Equipamiento
 - 🗡️ **Caballero**: recoge espadas para recuperar 1 ataque.
 - ➶ **Arquero**: recoge flechas para recuperar 1 ataque.
+
+## 💎 Sistema de Drop
+Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
+
+- Los dragones móviles 🐲 tienen mayor probabilidad de drop que los estáticos 🐉.
+- La cantidad máxima de munición en el mapa depende del número de dragones móviles vivos.
 
 ## 🚀 Ejecución
 ```
