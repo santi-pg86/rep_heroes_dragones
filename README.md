@@ -3,19 +3,25 @@
 Juego de aventuras en consola desarrollado en Python.
 
 ## 🎮 Descripción
-El héroe debe atravesar un mapa lleno de dragones para rescatar a la princesa. 
-Elige tu personaje, introduce tu nombre, selecciona la dificultad y ¡a aventurarse!
+El héroe debe atravesar un mapa lleno de dragones para rescatar a la princesa. Elige tu personaje, introduce tu nombre y ¡a aventurarse! Cada vez que rescates a la princesa podrás avanzar a una pantalla más difícil o repetir la actual para ganar experiencia.
 
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
 - 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar dos casillas en la dirección del último movimiento. Gasta un ataque aunque falle.
 - 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Ataca a distancia con **E** y desata una explosión caótica en área con **H**... pero cuidado, el poder tiene un precio.
 
-## 🗺️ Dificultad
-| Nivel | Mapa | Dragones | Munición inicial | Dragones móviles | Habilidades especiales |
-|---|---|---|---|---|---|
-| 0 - Fácil | 5x5 | 5 | 1 | 1 | 0 |
-| 1 - Media | 10x10 | 10 | 3 | 2 | 1 |
+## 🗺️ Progresión de Pantallas
+
+| Pantalla | Mapa | Dragones | Móviles | Munición |
+|---|---|---|---|---|
+| 1 | 5x5 | 5 | 2 | 2 |
+| 2 | 10x10 | 20 | 10 | 5 |
+| 3 | 15x15 | 45 | 22 | 12 |
+| 4 | 20x20 | 80 | 40 | 20 |
+| 5 | 25x25 | 125 | 62 | 32 |
+| 6+ | 30x30 | +5% por pantalla | 50% dragones | 45 |
+
+Al rescatar a la princesa puedes elegir avanzar a la siguiente pantalla, repetir la actual para farmear experiencia, o salir. Si pierdes, puedes reintentar la misma pantalla o salir.
 
 ## 🐲 Dragones Móviles
 Además de los dragones estáticos, hay dragones móviles que se mueven por el mapa después de cada turno del héroe.
@@ -61,8 +67,9 @@ Al matar activamente a un dragón existe una probabilidad de que aparezca munici
 
 ## 📊 Panel de Estado
 Antes de cada turno se muestra un panel con:
+- Pantalla actual y número de dragones estáticos y móviles.
 - Ataques disponibles.
-- Habilidad especial disponible (si la hay).
+- Habilidad especial disponible con radio de acción.
 - Escudo activo (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
 
