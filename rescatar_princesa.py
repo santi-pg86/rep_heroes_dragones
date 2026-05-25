@@ -21,8 +21,8 @@ def cargar_mapa():
 
         if mapa[fila][columna] == '🌲':
         
-           mapa[fila][columna] = '🐉'
-           dragones_en_mapa += 1
+            mapa[fila][columna] = '🐉'
+            dragones_en_mapa += 1
 
     while pociones_en_mapa < municion_inicial :
         fila = random.randint(0, tamano_mapa - 1)
@@ -30,30 +30,30 @@ def cargar_mapa():
 
         if mapa[fila][columna] == '🌲':
         
-           mapa[fila][columna] = mi_municion
-           pociones_en_mapa += 1
+            mapa[fila][columna] = mi_municion
+            pociones_en_mapa += 1
 
 def buscar_caballero():
     for fila in range(tamano_mapa):
         for columna in range(tamano_mapa):
-            if mapa[fila][columna] == mi_personaje:
+            if mapa[fila][columna] in (mi_personaje,'🛡️ '):
                 return fila, columna
 
 def comprobar_movimiento(fila, columna):
 
-    global ataques
+    global heroe
 
     if mi_personaje == '⚔️ ':
         if mapa[fila][columna] == mi_municion:
-            ataques += 1
+            heroe['ataques'] += 1
             mapa[fila][columna] = '⚔️ '
             return mapa[fila][columna]
         elif mapa[fila][columna] in ('🐉', '🐲'):
-            if ataques > 0: # Me quedan ataques por realizar:
+            if heroe['ataques'] > 0: # Me quedan ataques por realizar:
                 es_movil = mapa[fila][columna] == '🐲'
                 drop_municion(es_movil)
                 mapa[fila][columna] = '⚔️ '
-                ataques -= 1
+                heroe['ataques'] -= 1
             else:
                 mapa[fila][columna] = '☠️'
             return mapa[fila][columna]
@@ -64,7 +64,7 @@ def comprobar_movimiento(fila, columna):
         
     elif mi_personaje == '🏹':
         if mapa[fila][columna] == mi_municion:
-            ataques += 1
+            heroe['ataques'] += 1
             mapa[fila][columna] = '🏹'
             return mapa[fila][columna]
         elif mapa[fila][columna] in ('🐉', '🐲'):
@@ -112,7 +112,7 @@ def movimiento_caballero(movimiento):
     
 def ataque_arquero():
 
-    global ataques, princesa_muerta
+    global heroe, princesa_muerta
 
     try:
         fila, columna = buscar_caballero()
@@ -183,11 +183,11 @@ def ataque_arquero():
                             break
                 mapa[fila + 2][columna] = '🌲'
 
-        ataques -= 1
+        heroe['ataques'] -= 1
 
     except IndexError:
         print ('Has fallado el ataque.')
-        ataques -= 1
+        heroe['ataques'] -= 1
 
 def selector_de_personaje():
 
@@ -207,9 +207,9 @@ def seleccionar_movimiento():
     global ultimo_movimiento
 
     if mi_personaje == '⚔️ ':
-        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA): ')
+        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), H (Habilidad Especial): ')
     elif mi_personaje == '🏹':
-        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE): ')
+        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE), H (Habilidad Especial): ')
     
         if movimiento.lower() == 'e':
             ataque_arquero()
@@ -259,7 +259,8 @@ def selector_dragon_movil():
     return dragones
 
 def comprobar_movimiento_dragon(fila_dragon, columna_dragon):
-    global ataques
+
+    global heroe
 
     if mapa[fila_dragon][columna_dragon] == '🌲':
         return None
@@ -269,21 +270,25 @@ def comprobar_movimiento_dragon(fila_dragon, columna_dragon):
     elif mapa[fila_dragon][columna_dragon] == '🏹':
         mapa[fila_dragon][columna_dragon] = '☠️'
         return '☠️'
-    elif mapa[fila_dragon][columna_dragon] == mi_personaje and ataques > 0: ## El dragón muere
-        mapa[fila_dragon][columna_dragon] = mi_personaje
-        ataques -= 1
-        return 'dragon_muerto'
-    elif mapa[fila_dragon][columna_dragon] == mi_personaje and ataques ==  0: ## El caballero muere
-        mapa[fila_dragon][columna_dragon] = '☠️'
-        return '☠️'
+    elif mapa[fila_dragon][columna_dragon]  in (mi_personaje, '🛡️ '):
+        if heroe['escudo_activo']:  # Escudo activo: el dragón muere siempre
+            mapa[fila_dragon][columna_dragon] = mi_personaje
+            heroe['escudo_activo'] = False
+            return 'dragon_muerto'
+        elif heroe['ataques'] > 0:
+            mapa[fila_dragon][columna_dragon] = mi_personaje
+            heroe['ataques'] -= 1
+            return 'dragon_muerto'
+        else:
+            mapa[fila_dragon][columna_dragon] = '☠️'
+            return '☠️'
     
-
-
 def movimiento_dragon():
     ### Movimiento dragon 1
     ## El dragón se mueve aleatoriamente una casilla, pudiendo ser arriba, abajo, izquierda o derecha.Solo
     ## se puede mover a una zona de árbol. En caso de no haber casillas que cumplan esa condición, no se moverá.
     ## Lanzamos un aleatorio de 0,3 -> 0 (izquierda), 1 (derecha), 2 (arriba), 3 (abajo).
+
 
     for nombre_dragon, datos in dragones_moviles.items():
         filaDragon = datos['fila']
@@ -301,12 +306,18 @@ def movimiento_dragon():
         movimiento_dragon = False
         contador_movimientos = 0
         try:
-            while not movimiento_dragon:
-                mueve_dragon = random.randint(0, 3)
-                contador_movimientos += 1
-                if contador_movimientos == 4:
-                    break
-                if mueve_dragon == 0 and columnaDragon - 1 >= 0 and mapa[filaDragon][columnaDragon - 1] in ('🌲', mi_personaje, '👸'): ### izquierda
+
+            filaHeroe, columnaHeroe = buscar_caballero()
+            distancia = abs(filaDragon - filaHeroe) + abs(columnaDragon - columnaHeroe)
+
+            if heroe['escudo_activo'] and distancia <= heroe['radio_taunt']:
+                direcciones = [direccion_hacia_heroe(filaDragon, columnaDragon, filaHeroe, columnaHeroe)]
+            else:
+                direcciones = [0, 1, 2, 3]
+                random.shuffle(direcciones)
+
+            for mueve_dragon in direcciones:
+                if mueve_dragon == 0 and columnaDragon - 1 >= 0 and mapa[filaDragon][columnaDragon - 1] in ('🌲', '🛡️ ',mi_personaje, '👸'): ### izquierda
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon,columnaDragon - 1)
                     if check_movimiento is None:
@@ -314,8 +325,8 @@ def movimiento_dragon():
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon - 1
                     movimiento_dragon = True
-                    
-                elif mueve_dragon == 1 and mapa[filaDragon][columnaDragon + 1]  in ('🌲', mi_personaje, '👸'): ## derecha
+                    break
+                elif mueve_dragon == 1 and mapa[filaDragon][columnaDragon + 1]  in ('🌲', '🛡️ ', mi_personaje, '👸'): ## derecha
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon,columnaDragon + 1)
                     if check_movimiento is None:
@@ -323,8 +334,8 @@ def movimiento_dragon():
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon + 1
                     movimiento_dragon = True
-                    
-                elif mueve_dragon == 2 and filaDragon - 1 >= 0 and mapa[filaDragon - 1][columnaDragon] in ('🌲', mi_personaje, '👸'): ## arriba
+                    break
+                elif mueve_dragon == 2 and filaDragon - 1 >= 0 and mapa[filaDragon - 1][columnaDragon] in ('🌲', '🛡️ ', mi_personaje, '👸'): ## arriba
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon - 1,columnaDragon)
                     if check_movimiento is None:
@@ -332,18 +343,17 @@ def movimiento_dragon():
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon - 1
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon
                     movimiento_dragon = True
-                    
-                elif mueve_dragon == 3 and mapa[filaDragon + 1][columnaDragon]  in ('🌲', mi_personaje, '👸'):
+                    break
+                elif mueve_dragon == 3 and mapa[filaDragon + 1][columnaDragon]  in ('🌲','🛡️ ',  mi_personaje, '👸'):
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon + 1,columnaDragon)
                     if check_movimiento is None:
                         mapa[filaDragon + 1][columnaDragon] = '🐲'
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon + 1
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon
-                    movimiento_dragon = True
-                    
+                    movimiento_dragon = True    
+                    break
 
-                # y actualizando dragones_moviles[nombre_dragon]
         except IndexError:
             pass
 
@@ -404,6 +414,25 @@ def drop_municion(es_movil):
             if mapa[fila][columna] == '🌲':
                 mapa[fila][columna] = mi_municion
                 encontrado = True
+
+def habilidad_especial():
+
+    print(f'Habilidades disponibles: {heroe["habilidades_especiales"]}')
+    if mi_personaje == '⚔️ ':
+        if heroe['habilidades_especiales'] > 0:
+            heroe['escudo_activo'] = True
+            filaHeroe, ColumnaHeroe = buscar_caballero()
+            mapa[filaHeroe][ColumnaHeroe] = '🛡️ '
+            heroe['habilidades_especiales'] -= 1
+
+def direccion_hacia_heroe(filaDragon, columnaDragon, filaHeroe, columnaHeroe):
+    diff_fila = filaHeroe - filaDragon
+    diff_columna = columnaHeroe - columnaDragon
+    
+    if abs(diff_fila) >= abs(diff_columna):
+        return 2 if diff_fila < 0 else 3  # arriba o abajo
+    else:
+        return 0 if diff_columna < 0 else 1  # izquierda o derecha
 ################################
 
 lista_personajes = ('⚔️ ','🏹','🧙')
@@ -434,21 +463,43 @@ else:
         num_dragones = 5
         municion_inicial  = 1
         max_dragones_moviles = 1
+        max_habilidades = 0
     elif dificultad == 1:
         tamano_mapa = 10
         num_dragones = 10
         municion_inicial  = 3
         max_dragones_moviles  = 2
-
+        max_habilidades = 1
+        
     max_municion = max_dragones_moviles // 2
 
+    if mi_personaje == '⚔️ ':
+        heroe = {
+            'ataques': 3,
+            'habilidades_especiales': max_habilidades,
+            'nivel': 1,
+            'experiencia': 0,
+            'escudo_activo': False,
+            'radio_taunt': 4,
+            'distancia_disparo': None
+        }
+    elif mi_personaje == '🏹':
+            heroe = {
+                'ataques': 3,
+                'habilidades_especiales': max_habilidades,
+                'nivel': 1,
+                'experiencia': 0,
+                'escudo_activo': None,
+                'radio_taunt': None,
+                'distancia_disparo': 2
+    }
+            
     mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
     print('Personaje elegido: ', mi_personaje)
 
-    ataques = 3
 
-    print(f'Vamos a rescatar a la princesa. Dispone de {ataques} ataques')
+    print(f'Vamos a rescatar a la princesa. Dispone de {heroe["ataques"]} ataques')
 
     cargar_mapa()
     dragones_moviles = selector_dragon_movil()
@@ -458,13 +509,13 @@ else:
 
     ultimo_movimiento = 'd' # Como dijimos que el primer ataque, si no se ha movido antes es hacia la derecha lo inicializamos
     movimiento = seleccionar_movimiento()  # Primera jugada antes del bucle
-    if ataques < 0:
-        ataques = 0
+    if heroe['ataques'] < 0:
+        heroe['ataques'] = 0
 
     while True:
         print(f'Inicio bucle, movimiento: {movimiento}')  # Debug
         if movimiento.lower() == 'e':
-            print(f'Dispone de {ataques} ataques')
+            print(f'Dispone de {heroe["ataques"]} ataques')
             if princesa_muerta:
                 print('¡Has matado a la princesa!')
                 mostrar_mapa()
@@ -480,8 +531,43 @@ else:
                 break
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
-            continue  
+            continue
+        elif movimiento.lower() == 'h':
+            if heroe['habilidades_especiales'] == 0:
+                print('No tienes habilidades especiales disponibles')
+                mostrar_mapa()
+                movimiento = seleccionar_movimiento()
+                continue
+            habilidad_especial()
+            resultado_dragon = movimiento_dragon()
+            if resultado_dragon == '☠️':
+                print('El héroe ha sido atrapado por el dragón')
+                mostrar_mapa()
+                break
+            elif resultado_dragon == '🪦':
+                print('El dragón ha llegado antes a la princesa')
+                mostrar_mapa()
+                break
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
+
+
+
+        if heroe['escudo_activo']:
+            resultado_dragon = movimiento_dragon()
+            if resultado_dragon == '🪦':
+                print('El dragón ha llegado antes a la princesa')
+                mostrar_mapa()
+                break
+            print(f'Dispone de {heroe["ataques"]} ataques')
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
+
         resultado_heroe = movimiento_caballero(movimiento)
+            
+        
         if resultado_heroe == 'invalido':
             print('Movimiento no válido')
             mostrar_mapa()
@@ -502,6 +588,7 @@ else:
             mostrar_mapa()
             break      
 
+
         resultado_dragon = movimiento_dragon()
         
 
@@ -514,8 +601,7 @@ else:
             mostrar_mapa()
             break 
 
-        print(f'Dispone de {ataques} ataques')
+        print(f'Dispone de {heroe["ataques"]} ataques')
         mostrar_mapa()
         
         movimiento = seleccionar_movimiento()
-            
