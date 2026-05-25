@@ -469,7 +469,10 @@ def mostrar_estado(mensaje_final=None, fin_partida=False):
     if not fin_partida:
         print(f'{mi_personaje}  Ataques disponibles: {max(0, heroe["ataques"])}')
         if heroe['habilidades_especiales'] > 0:
-            print(f'✨ Habilidad especial disponible: {ataque_especial}')
+            if mi_personaje == '⚔️ ':
+                print(f'✨ Habilidad especial disponible: {ataque_especial} (radio taunt: {heroe["radio_taunt"]})')
+            else:
+                print(f'✨ Habilidad especial disponible: {ataque_especial} (radio: {heroe["distancia_disparo"]})')
         if mi_personaje == '⚔️ ' and heroe['escudo_activo']:
             print(f'🛡️  Escudo activo - Inmóvil, esperando dragones')
         if mi_personaje == '🧙' and turnos_caos > 0:
