@@ -9,7 +9,7 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
 - 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar dos casillas en la dirección del último movimiento. Gasta un ataque aunque falle.
-- 🧙 **Mago**: bloqueado. Compra el DLC para desbloquearlo.
+- 🧙 **Mago**: bloqueado. Compra el DLC **"El Pacto del Caos"** para desbloquearlo.
 
 ## 🗺️ Dificultad
 | Nivel | Mapa | Dragones | Munición inicial | Dragones móviles | Habilidades especiales |
