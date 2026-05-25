@@ -4,12 +4,12 @@ Juego de aventuras en consola desarrollado en Python.
 
 ## 🎮 Descripción
 El héroe debe atravesar un mapa lleno de dragones para rescatar a la princesa. 
-Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
+Elige tu personaje, introduce tu nombre, selecciona la dificultad y ¡a aventurarse!
 
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
 - 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar dos casillas en la dirección del último movimiento. Gasta un ataque aunque falle.
-- 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Usa **E** para disparar igual que el arquero. Su habilidad especial **H** desata un ataque en área en forma de cruz. Pero cuidado... el poder tiene un precio.
+- 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Ataca a distancia con **E** y desata una explosión caótica en área con **H**... pero cuidado, el poder tiene un precio.
 
 ## 🗺️ Dificultad
 | Nivel | Mapa | Dragones | Munición inicial | Dragones móviles | Habilidades especiales |
@@ -37,9 +37,7 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 - **H** → Habilidad especial
 
 ## 🛡️ Equipamiento
-- 🗡️ **Caballero**: recoge espadas para recuperar 1 ataque.
-- ➶ **Arquero**: recoge flechas para recuperar 1 ataque.
-- ⚡ **Mago**: recoge rayos para recuperar 1 ataque.
+- 🗡️ / ➶ / ⚡: Recoge tu munición para recuperar 1 punto de ataque.
 
 ## ⚡ Habilidades Especiales
 
@@ -60,6 +58,13 @@ Al matar activamente a un dragón existe una probabilidad de que aparezca munici
 
 - Los dragones móviles 🐲 tienen mayor probabilidad de drop que los estáticos 🐉.
 - La cantidad máxima de munición en el mapa depende del número de dragones móviles vivos.
+
+## 📊 Panel de Estado
+Antes de cada turno se muestra un panel con:
+- Ataques disponibles.
+- Habilidad especial disponible (si la hay).
+- Escudo activo (caballero).
+- Pacto del Caos activo y turnos restantes (mago).
 
 ## 🚀 Ejecución
 ```
