@@ -168,17 +168,6 @@ def seleccionar_movimiento():
             ultimo_movimiento = movimiento
     return movimiento
 
-def selector_dificultad():
-    while True:
-        try:
-            dificultad = int(input('Selecciona dificultad (0: Fácil, 1: Media): '))
-            if dificultad in (0, 1):
-                return dificultad
-            else:
-                print('Opción no válida, elige 0 o 1')
-        except ValueError:
-            print('Debes introducir un número')
-
 def selector_municion():
     municiones = {'⚔️ ': '🗡️ ', '🏹': '➶ ', '🧙': '⚡'}
     return municiones.get(mi_personaje, '❤️')
@@ -276,7 +265,8 @@ def movimiento_dragon():
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon - 1
                     break
-                elif mueve_dragon == 1 and mapa[filaDragon][columnaDragon + 1]  in ('🌲', '🛡️ ', mi_personaje, '👸'): ## derecha
+                elif mueve_dragon == 1 and columnaDragon + 1 < tamano_mapa and mapa[filaDragon][columnaDragon + 1] in ('🌲', '🛡️ ', mi_personaje, '👸'): ## derecha
+
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon,columnaDragon + 1)
                     if check_movimiento is None:
@@ -292,7 +282,7 @@ def movimiento_dragon():
                         dragones_moviles[nombre_dragon]['fila'] = filaDragon - 1
                         dragones_moviles[nombre_dragon]['columna'] = columnaDragon
                     break
-                elif mueve_dragon == 3 and mapa[filaDragon + 1][columnaDragon]  in ('🌲','🛡️ ',  mi_personaje, '👸'):
+                elif mueve_dragon == 3 and filaDragon + 1 < tamano_mapa and mapa[filaDragon + 1][columnaDragon] in ('🌲','🛡️ ', mi_personaje, '👸'): ## abajo
                     mapa[filaDragon][columnaDragon] = '🌲'
                     check_movimiento = comprobar_movimiento_dragon(filaDragon + 1,columnaDragon)
                     if check_movimiento is None:
@@ -467,6 +457,9 @@ def direccion_hacia_heroe(filaDragon, columnaDragon, filaHeroe, columnaHeroe):
 def mostrar_estado(mensaje_final=None, fin_partida=False):
     print(f'#################################################')
     if not fin_partida:
+        dragones_estaticos = sum(1 for i in range(tamano_mapa) for j in range(tamano_mapa) if mapa[i][j] == '🐉')
+        dragones_moviles_vivos = sum(1 for datos in dragones_moviles.values() if datos['vivo'])
+        print(f'📍 Pantalla: {pantalla_actual}  🐉 Dragones: {dragones_estaticos}  🐲 Móviles: {dragones_moviles_vivos}')
         print(f'{mi_personaje}  Ataques disponibles: {max(0, heroe["ataques"])}')
         if heroe['habilidades_especiales'] > 0:
             if mi_personaje == '⚔️ ':
@@ -480,6 +473,70 @@ def mostrar_estado(mensaje_final=None, fin_partida=False):
     if mensaje_final:
         print(mensaje_final)
     print(f'#################################################')
+
+def obtener_parametros_pantalla(pantalla):
+    parametros_fijos = {
+        1: (5, 5, 2, 2),
+        2: (10, 20, 10, 5),
+        3: (15, 45, 22, 12),
+        4: (20, 80, 40, 20),
+        5: (25, 125, 62, 32),
+        6: (30, 180, 90, 45),
+    }
+    
+    if pantalla <= 6:
+        tamano, dragones, moviles, municion = parametros_fijos[pantalla]
+    else:
+        tamano = 30
+        municion = 45
+        dragones_base = 180
+        for _ in range(pantalla - 6):
+            dragones_base = int(dragones_base * 1.05)
+        dragones = dragones_base
+        moviles = -(-dragones // 2)  # redondeo hacia arriba
+    
+    return tamano, dragones, moviles, municion
+
+def cargar_pantalla(pantalla_actual):
+    global princesa_muerta, turnos_caos, tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial, mapa
+
+    while (opcion := input('¿Quieres avanzar a la siguiente pantalla (A), repetir esta (R) o salir (S)? ').lower()) not in ('a', 'r', 's'):
+        print('Opción no válida')
+
+    if opcion == 's':
+        print(f'¡Hasta pronto {nombre_personaje}!')
+        exit()
+    if opcion == 'a':
+        pantalla_actual += 1
+
+    tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial = obtener_parametros_pantalla(pantalla_actual)
+    princesa_muerta = False
+    turnos_caos = 0
+    heroe['ataques'] = 3
+    heroe['habilidades_especiales'] = max_habilidades
+    if mi_personaje == '⚔️ ':
+        heroe['escudo_activo'] = False
+    mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
+    
+    return pantalla_actual
+
+def cargar_pantalla_derrota():
+    global princesa_muerta, turnos_caos, mapa
+
+    while (opcion := input('¿Quieres intentarlo de nuevo (R) o salir (S)? ').lower()) not in ('r', 's'):
+        print('Opción no válida')
+
+    if opcion == 's':
+        print(f'¡Hasta pronto {nombre_personaje}!')
+        exit()
+
+    princesa_muerta = False
+    turnos_caos = 0
+    heroe['ataques'] = 3
+    heroe['habilidades_especiales'] = max_habilidades
+    if mi_personaje == '⚔️ ':
+        heroe['escudo_activo'] = False
+    mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
 ################################
 
@@ -501,22 +558,12 @@ nombre_personaje = input('Introduce tu nombre, héroe: ')
 mi_personaje = selector_de_personaje()
 mi_municion = selector_municion()
 turnos_caos = 0
-dificultad = selector_dificultad()
 
-if dificultad == 0:
-    tamano_mapa = 5
-    num_dragones = 5
-    municion_inicial  = 1
-    max_dragones_moviles = 1
-    max_habilidades = 0
-elif dificultad == 1:
-    tamano_mapa = 10
-    num_dragones = 10
-    municion_inicial  = 3
-    max_dragones_moviles  = 2
-    max_habilidades = 1
+pantalla_actual = 1  
+tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial = obtener_parametros_pantalla(pantalla_actual)
     
 max_municion = max_dragones_moviles // 2
+max_habilidades = 1
 
 heroe = {
     'ataques': 3,
@@ -566,16 +613,34 @@ while True:
         if princesa_muerta:
             mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '☠️ ':
             mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         elif resultado_dragon == '🪦':
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -592,11 +657,23 @@ while True:
         if resultado_dragon == '☠️ ':
             mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         elif resultado_dragon == '🪦':
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -609,7 +686,13 @@ while True:
         if resultado_dragon == '🪦':
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
-            break
+            cargar_pantalla_derrota()
+            cargar_mapa()
+            dragones_moviles = selector_dragon_movil()
+            mostrar_estado()
+            mostrar_mapa()
+            movimiento = seleccionar_movimiento()
+            continue
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -628,16 +711,34 @@ while True:
     if resultado_heroe == '☠️ ':
         mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()
-        break
+        cargar_pantalla_derrota()
+        cargar_mapa()
+        dragones_moviles = selector_dragon_movil()
+        mostrar_estado()
+        mostrar_mapa()
+        movimiento = seleccionar_movimiento()
+        continue
     elif resultado_heroe == '👸':
         mapa[tamano_mapa - 1][tamano_mapa - 1] = '🏰'
         mostrar_estado('🏰  ¡La princesa ha sido rescatada!', fin_partida=True)
         mostrar_mapa()
-        break
+        pantalla_actual = cargar_pantalla(pantalla_actual)
+        cargar_mapa()
+        dragones_moviles = selector_dragon_movil()
+        mostrar_estado()
+        mostrar_mapa()
+        movimiento = seleccionar_movimiento()
+        continue
     elif resultado_heroe == '🪦':
         mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
         mostrar_mapa()
-        break      
+        cargar_pantalla_derrota()
+        cargar_mapa()
+        dragones_moviles = selector_dragon_movil()
+        mostrar_estado()
+        mostrar_mapa()
+        movimiento = seleccionar_movimiento()
+        continue      
 
 
     resultado_dragon = movimiento_dragon()
@@ -646,11 +747,23 @@ while True:
     if resultado_dragon == '☠️ ':
         mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()
-        break
+        cargar_pantalla_derrota()
+        cargar_mapa()
+        dragones_moviles = selector_dragon_movil()
+        mostrar_estado()
+        mostrar_mapa()
+        movimiento = seleccionar_movimiento()
+        continue
     elif resultado_dragon == '🪦':
         mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
         mostrar_mapa()
-        break 
+        cargar_pantalla_derrota()
+        cargar_mapa()
+        dragones_moviles = selector_dragon_movil()
+        mostrar_estado()
+        mostrar_mapa()
+        movimiento = seleccionar_movimiento()
+        continue 
 
     mostrar_estado()
     mostrar_mapa()
