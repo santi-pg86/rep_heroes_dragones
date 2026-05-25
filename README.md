@@ -42,7 +42,7 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 
 ## ⚡ Habilidades Especiales
 - ⚔️ **Caballero - Escudo**: activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo, los dragones móviles cercanos son atraídos hacia él. El escudo se desactiva al matar al primer dragón que llega.
-- 🏹 **Arquero**: próximamente.
+- 🏹 **Arquero - Disparo dirigido**: permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Las municiones no son obstáculo.
 
 ## 💎 Sistema de Drop
 Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
