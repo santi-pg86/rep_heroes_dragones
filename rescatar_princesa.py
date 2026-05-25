@@ -424,6 +424,86 @@ def habilidad_especial():
             filaHeroe, ColumnaHeroe = buscar_caballero()
             mapa[filaHeroe][ColumnaHeroe] = '🛡️ '
             heroe['habilidades_especiales'] -= 1
+    elif mi_personaje == '🏹':
+        if heroe['habilidades_especiales'] > 0:
+            filaHeroe, ColumnaHeroe = buscar_caballero()
+            disparo_dirigido(filaHeroe, ColumnaHeroe)
+            heroe['habilidades_especiales'] -= 1
+
+
+def disparo_dirigido(fila, columna):
+
+
+        
+    while (direccion_disparo := input('Introduce la dirección del disparo W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA): ').lower()) not in ('a', 'w', 's', 'd'):
+        print('Dirección no válida')
+
+    try:
+
+        if direccion_disparo.lower() == 'a':
+
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                if mapa[fila][columna - i] in ('🐉', '🐲'):
+                    if mapa[fila][columna - i] == '🐲':
+                        for nombre_dragon, datos in dragones_moviles.items():
+                            if datos['fila'] == fila and datos['columna'] == columna - i:
+                                datos['vivo'] = False
+                                drop_municion(True)
+                                break
+                    else:
+                        drop_municion(False)
+                    mapa[fila][columna - i] = '🌲'
+                    break
+
+        if direccion_disparo.lower() == 's':
+
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                if mapa[fila + i][columna] in ('🐉', '🐲'):
+                    if mapa[fila + i][columna] == '🐲':
+                        for nombre_dragon, datos in dragones_moviles.items():
+                            if datos['fila'] == fila + i and datos['columna'] == columna:
+                                datos['vivo'] = False
+                                drop_municion(True)
+                                break
+                    else:
+                        drop_municion(False)
+                    mapa[fila + i][columna] = '🌲'
+                    break
+
+        if direccion_disparo.lower() == 'w':
+
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                if mapa[fila - i][columna] in ('🐉', '🐲'):
+                    if mapa[fila - i][columna] == '🐲':
+                        for nombre_dragon, datos in dragones_moviles.items():
+                            if datos['fila'] == fila - i and datos['columna'] == columna:
+                                datos['vivo'] = False
+                                drop_municion(True)
+                                break
+                    else:
+                        drop_municion(False)
+                    mapa[fila - i][columna] = '🌲'
+                    break
+
+        if direccion_disparo.lower() == 'd':
+
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                if mapa[fila][columna + i] in ('🐉', '🐲'):
+                    if mapa[fila][columna + i] == '🐲':
+                        for nombre_dragon, datos in dragones_moviles.items():
+                            if datos['fila'] == fila and datos['columna'] == columna + i:
+                                datos['vivo'] = False
+                                drop_municion(True)
+                                break
+                    else:
+                        drop_municion(False)
+                    mapa[fila][columna + i] = '🌲'
+                    break
+
+    except IndexError:
+        pass
+                      
+
 
 def direccion_hacia_heroe(filaDragon, columnaDragon, filaHeroe, columnaHeroe):
     diff_fila = filaHeroe - filaDragon
