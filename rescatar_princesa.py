@@ -522,7 +522,7 @@ print(lista_personajes[0],' : El caballero es un luchador cuerpo a cuerpo. Pasa 
 print(lista_personajes[1],' : El arquero es un luchador a distancia. Para atacar selecciona el botón de ataque (E).',end= ' ')
 print('Solo puede atacar en la dirección del último movimiento realizado y únicamente a dos posiciones respecto a la actual.', end= ' ')
 print('Si el primer movimiento es un ataque se hará hacia la derecha. El ataque se reduce aunque falles el golpe.')
-print(lista_personajes[2],' : Contenido bloqueado. Compra el DLC para desbloquearlo.')
+print(lista_personajes[2],' : Contenido bloqueado. Compra el DLC "El Pacto del Caos" para desbloquearlo.')
 print('❤️: Si pasas sobre un corazón recuperas 1 punto de ataque')
 #######################
 
@@ -533,7 +533,7 @@ mi_personaje = selector_de_personaje()
 mi_municion = selector_municion()
 
 if mi_personaje == '🧙':
-    print('Se le abrirá el navegador para que introduzca sus datos bancarios y desbloquear el DLC')
+    print('Se le abrirá el navegador para que introduzca sus datos bancarios y desbloquear el DLC "El Pacto del Caos"')
 else:
 
     dificultad = selector_dificultad()
