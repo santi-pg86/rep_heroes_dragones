@@ -9,7 +9,7 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
 - 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar dos casillas en la dirección del último movimiento. Gasta un ataque aunque falle.
-- 🧙 **Mago**: bloqueado. Compra el DLC **"El Pacto del Caos"** para desbloquearlo.
+- 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Usa **E** para disparar igual que el arquero. Su habilidad especial **H** desata un ataque en área en forma de cruz. Pero cuidado... el poder tiene un precio.
 
 ## 🗺️ Dificultad
 | Nivel | Mapa | Dragones | Munición inicial | Dragones móviles | Habilidades especiales |
@@ -24,7 +24,7 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 - Solo pueden moverse a casillas vacías 🌲, o hacia el héroe y la princesa.
 - Si alcanzan al héroe sin ataques → el héroe muere.
 - Si el caballero tiene ataques cuando coinciden → el dragón muere.
-- El arquero muere siempre al contacto con un dragón móvil.
+- El arquero y el mago mueren siempre al contacto con un dragón móvil.
 - Si llegan a la princesa antes que el héroe → el héroe pierde.
 - Al morir un dragón móvil, se selecciona un nuevo dragón estático para reemplazarlo.
 
@@ -33,16 +33,27 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 - **S** → Abajo
 - **A** → Izquierda
 - **D** → Derecha
-- **E** → Ataque (solo arquero)
+- **E** → Ataque (arquero y mago)
 - **H** → Habilidad especial
 
 ## 🛡️ Equipamiento
 - 🗡️ **Caballero**: recoge espadas para recuperar 1 ataque.
 - ➶ **Arquero**: recoge flechas para recuperar 1 ataque.
+- ⚡ **Mago**: recoge rayos para recuperar 1 ataque.
 
 ## ⚡ Habilidades Especiales
-- ⚔️ **Caballero - Escudo**: activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo, los dragones móviles cercanos son atraídos hacia él. El escudo se desactiva al matar al primer dragón que llega.
-- 🏹 **Arquero - Disparo dirigido**: permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Las municiones no son obstáculo.
+
+### ⚔️ Caballero - Escudo
+Activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo:
+- Los dragones móviles cercanos son atraídos hacia él (taunt).
+- El caballero permanece inmóvil.
+- El escudo se desactiva al matar al primer dragón que llega.
+
+### 🏹 Arquero - Disparo dirigido
+Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Las municiones no son obstáculo. Distancia mínima: 2 casillas.
+
+### 🧙 Mago - El Pacto del Caos
+Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa. Úsalo con cabeza... o perderás todo lo que acabas de ganar.
 
 ## 💎 Sistema de Drop
 Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
