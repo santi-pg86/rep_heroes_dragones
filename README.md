@@ -12,16 +12,17 @@ Elige tu personaje, selecciona la dificultad y ¡a aventurarse!
 - 🧙 **Mago**: bloqueado. Compra el DLC para desbloquearlo.
 
 ## 🗺️ Dificultad
-| Nivel | Mapa | Dragones | Munición inicial | Dragones móviles |
-|---|---|---|---|---|
-| 0 - Fácil | 5x5 | 5 | 1 | 1 |
-| 1 - Media | 10x10 | 10 | 3 | 2 |
+| Nivel | Mapa | Dragones | Munición inicial | Dragones móviles | Habilidades especiales |
+|---|---|---|---|---|---|
+| 0 - Fácil | 5x5 | 5 | 1 | 1 | 0 |
+| 1 - Media | 10x10 | 10 | 3 | 2 | 1 |
 
 ## 🐲 Dragones Móviles
 Además de los dragones estáticos, hay dragones móviles que se mueven por el mapa después de cada turno del héroe.
 
 - Se mueven aleatoriamente una casilla (arriba, abajo, izquierda o derecha).
 - Solo pueden moverse a casillas vacías 🌲, o hacia el héroe y la princesa.
+- Si alcanzan al héroe sin ataques → el héroe muere.
 - Si el caballero tiene ataques cuando coinciden → el dragón muere.
 - El arquero muere siempre al contacto con un dragón móvil.
 - Si llegan a la princesa antes que el héroe → el héroe pierde.
@@ -33,10 +34,15 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 - **A** → Izquierda
 - **D** → Derecha
 - **E** → Ataque (solo arquero)
+- **H** → Habilidad especial
 
 ## 🛡️ Equipamiento
 - 🗡️ **Caballero**: recoge espadas para recuperar 1 ataque.
 - ➶ **Arquero**: recoge flechas para recuperar 1 ataque.
+
+## ⚡ Habilidades Especiales
+- ⚔️ **Caballero - Escudo**: activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo, los dragones móviles cercanos son atraídos hacia él. El escudo se desactiva al matar al primer dragón que llega.
+- 🏹 **Arquero**: próximamente.
 
 ## 💎 Sistema de Drop
 Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
