@@ -159,7 +159,11 @@ def seleccionar_movimiento():
         movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE), H (Habilidad Especial): ')
     
         if movimiento.lower() == 'e':
-            ataque_E()
+            if heroe['ataques'] <= 0:
+                print('No tienes ataques disponibles')
+                return seleccionar_movimiento()
+            else:
+                ataque_E()
         else:
             ultimo_movimiento = movimiento
     return movimiento
@@ -363,7 +367,6 @@ def drop_municion(es_movil):
 
 def habilidad_especial():
 
-    print(f'Habilidades disponibles: {heroe["habilidades_especiales"]}')
     if mi_personaje == '⚔️ ':
         if heroe['habilidades_especiales'] > 0:
             heroe['escudo_activo'] = True
@@ -459,6 +462,22 @@ def direccion_hacia_heroe(filaDragon, columnaDragon, filaHeroe, columnaHeroe):
         return 2 if diff_fila < 0 else 3  # arriba o abajo
     else:
         return 0 if diff_columna < 0 else 1  # izquierda o derecha
+    
+
+def mostrar_estado(mensaje_final=None, fin_partida=False):
+    print(f'#################################################')
+    if not fin_partida:
+        print(f'{mi_personaje}  Ataques disponibles: {max(0, heroe["ataques"])}')
+        if heroe['habilidades_especiales'] > 0:
+            print(f'✨ Habilidad especial disponible: {ataque_especial}')
+        if mi_personaje == '⚔️ ' and heroe['escudo_activo']:
+            print(f'🛡️  Escudo activo - Inmóvil, esperando dragones')
+        if mi_personaje == '🧙' and turnos_caos > 0:
+            print(f'⚡ PACTO DEL CAOS activo. Turnos restantes: {turnos_caos}')
+    if mensaje_final:
+        print(mensaje_final)
+    print(f'#################################################')
+
 ################################
 
 lista_personajes = ('⚔️ ','🏹','🧙')
@@ -468,13 +487,14 @@ print(lista_personajes[0],' : El caballero es un luchador cuerpo a cuerpo. Pasa 
 print(lista_personajes[1],' : El arquero es un luchador a distancia. Para atacar selecciona el botón de ataque (E).',end= ' ')
 print('Solo puede atacar en la dirección del último movimiento realizado y únicamente a dos posiciones respecto a la actual.', end= ' ')
 print('Si el primer movimiento es un ataque se hará hacia la derecha. El ataque se reduce aunque falles el golpe.')
-print(lista_personajes[2],' : Contenido bloqueado. Compra el DLC "El Pacto del Caos" para desbloquearlo.')
-print('❤️: Si pasas sobre un corazón recuperas 1 punto de ataque')
+print(lista_personajes[2],' : 🧙 El Mago - DLC "El Pacto del Caos". El más poderoso de los tres héroes. Ataca a distancia con E y desata una explosión caótica en área con H... pero cuidado, el poder tiene un precio.')
+print('🗡️ /➶ /⚡: Recoge tu munición para recuperar 1 punto de ataque')
 #######################
 
 print('🌲', '🐉', '🐲', '⚔️ ', '🏹', '🧙', '👸', '🏰', '☠️ ', '🪦', '🗡️ ', '➶ ', '❤️')
 princesa_muerta = False
 
+nombre_personaje = input('Introduce tu nombre, héroe: ')
 mi_personaje = selector_de_personaje()
 mi_municion = selector_municion()
 turnos_caos = 0
@@ -513,14 +533,22 @@ elif mi_personaje in ('🏹', '🧙'):
         
 mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
-print('Personaje elegido: ', mi_personaje)
+print('####################################')
+if mi_personaje == '⚔️ ':
+    print(f'Bienvenido {mi_personaje} caballero {nombre_personaje}.')
+    ataque_especial = 'Escudo'
+if mi_personaje == '🏹':
+    print(f'Bienvenido {mi_personaje} arquero {nombre_personaje}.')
+    ataque_especial = 'Disparo dirigido'
+if mi_personaje == '🧙':
+    print(f'Bienvenido {mi_personaje} mago {nombre_personaje}.')
+    ataque_especial = 'Explosión caótica'
 
-
-print(f'Vamos a rescatar a la princesa. Dispone de {heroe["ataques"]} ataques')
+print(f'Vamos a rescatar a la princesa.')
 
 cargar_mapa()
 dragones_moviles = selector_dragon_movil()
-print('Mapa cargado')
+mostrar_estado()
 mostrar_mapa()
 
 
@@ -530,42 +558,43 @@ if heroe['ataques'] < 0:
     heroe['ataques'] = 0
 
 while True:
-    if turnos_caos > 0:
-        print(f'⚡ ¡EL CAOS REINA! Los dragones van a por la princesa. Turnos restantes: {turnos_caos}')
+
     if movimiento.lower() == 'e':
-        print(f'Dispone de {heroe["ataques"]} ataques')
         if princesa_muerta:
-            print('¡Has matado a la princesa!')
+            mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
             mostrar_mapa()
             break
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '☠️ ':
-            print('El héroe ha sido atrapado por el dragón')
+            mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
             break
         elif resultado_dragon == '🪦':
-            print('El dragón ha llegado antes a la princesa')
+            mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             break
+        mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
         continue
     elif movimiento.lower() == 'h':
         if heroe['habilidades_especiales'] == 0:
             print('No tienes habilidades especiales disponibles')
+            mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
             continue
         habilidad_especial()
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '☠️ ':
-            print('El héroe ha sido atrapado por el dragón')
+            mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
             break
         elif resultado_dragon == '🪦':
-            print('El dragón ha llegado antes a la princesa')
+            mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             break
+        mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
         continue
@@ -575,10 +604,10 @@ while True:
     if heroe['escudo_activo']:
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '🪦':
-            print('El dragón ha llegado antes a la princesa')
+            mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             break
-        print(f'Dispone de {heroe["ataques"]} ataques')
+        mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
         continue
@@ -588,21 +617,22 @@ while True:
     
     if resultado_heroe == 'invalido':
         print('Movimiento no válido')
+        mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
         continue
 
     if resultado_heroe == '☠️ ':
-        print('El héroe ha perdido')
+        mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()
         break
     elif resultado_heroe == '👸':
         mapa[tamano_mapa - 1][tamano_mapa - 1] = '🏰'
-        print('¡Princesa rescatada!')
+        mostrar_estado('🏰  ¡La princesa ha sido rescatada!', fin_partida=True)
         mostrar_mapa()
         break
     elif resultado_heroe == '🪦':
-        print('¡Has matado a la princesa!')
+        mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
         mostrar_mapa()
         break      
 
@@ -611,15 +641,15 @@ while True:
     
 
     if resultado_dragon == '☠️ ':
-        print('El héroe ha sido atrapado por el dragón')
+        mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()
         break
     elif resultado_dragon == '🪦':
-        print('El dragón ha llegado antes a la princesa')
+        mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
         mostrar_mapa()
         break 
 
-    print(f'Dispone de {heroe["ataques"]} ataques')
+    mostrar_estado()
     mostrar_mapa()
     
     movimiento = seleccionar_movimiento()
