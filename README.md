@@ -39,7 +39,7 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 - **S** → Abajo
 - **A** → Izquierda
 - **D** → Derecha
-- **E** → Ataque (arquero y mago)
+- **E** → Ataque (arquero y mago). Se indica la dirección del disparo en el prompt.
 - **H** → Habilidad especial
 
 ## 🛡️ Equipamiento
@@ -64,7 +64,12 @@ Permite seleccionar libremente la dirección del disparo, independientemente del
 Los dragones móviles siempre detienen la flecha; los estáticos solo la detienen por debajo del nivel 5.
 
 ### 🧙 Mago - El Pacto del Caos
-Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa.
+Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los turnos siguientes todos los dragones móviles se dirigen directamente hacia la princesa.
+
+**Nivel 5+:** Al activar H se aplica un bonus antes de la explosión:
+- Cada dragón móvil elimina todos los dragones estáticos en un radio de `min(2 × ataques_disponibles, 10)` casillas (solo horizontal y vertical).
+- Por cada 4 dragones estáticos eliminados con el bonus, se resta 1 turno de caos.
+- Los ataques del mago se reducen a 0 al activar el bonus.
 
 ## 💎 Sistema de Drop
 Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
@@ -112,6 +117,21 @@ La experiencia y el nivel se mantienen entre pantallas. Nivel máximo: 10.
 | 9 | 7 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
 | 10 | 8 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
 
+## 🧙 Niveles del Mago
+
+| Nivel | Ataques | Dist E | Radio H | Habilidades | Turnos caos | Bonus |
+|---|---|---|---|---|---|---|
+| 1 | 3 | 2 | 2 | 1 | 3 | - |
+| 2 | 3 | 3 | 3 | 1 | 3 | - |
+| 3 | 3 | 3 | 4 | 1 | 3 | - |
+| 4 | 3 | 3 | 4 | 1 | 3 | - |
+| 5 | 3 | 4 | 5 | 1 | 3 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+| 6 | 4 | 4 | 5 | 2 | 4 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+| 7 | 5 | 4 | 5 | 2 | 5 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+| 8 | 6 | 4 | 5 | 3 | 6 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+| 9 | 7 | 4 | 5 | 3 | 7 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+| 10 | 8 | 4 | 5 | 3 | 8 | Elimina estáticos en radio min(2×ataques,10) por cada dragón móvil |
+
 ## 📊 Panel de Estado
 Antes de cada turno se muestra un panel con:
 - Pantalla actual y número de dragones estáticos y móviles.
@@ -119,11 +139,8 @@ Antes de cada turno se muestra un panel con:
 - Nivel y XP actual / XP para siguiente nivel.
 - Caballero: habilidad con radio taunt, dragones absorbibles, usos disponibles y bonus si nivel ≥ 5.
 - Arquero: distancia ataque E, habilidad con radio H, usos disponibles y bonus si nivel ≥ 5.
-- Mago: habilidad con radio y usos disponibles.
+- Mago: distancia ataque E, habilidad con radio H, usos disponibles, radio del bonus si nivel ≥ 5.
 - Escudo activo con dragones restantes por absorber (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
 
 ## 🚀 Ejecución
-```
-python rescatar_princesa.py
-```
