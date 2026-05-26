@@ -1,4 +1,28 @@
 import random
+import os
+
+def obtener_nombre_fichero(nombre, personaje):
+    tipos = {'⚔️ ': 'caballero', '🏹': 'arquero', '🧙': 'mago'}
+    tipo = tipos[personaje]
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'saves_heroes_dragones', f'{nombre}_{tipo}.txt')
+
+def cargar_save(nombre, personaje):
+    fichero = obtener_nombre_fichero(nombre, personaje)
+    if os.path.exists(fichero):
+        while (opcion := input(f'Se encontró una partida guardada para {nombre}. ¿Quieres cargarla? (S/N): ').upper()) not in ('S', 'N'):
+            print('Opción no válida')
+        if opcion == 'S':
+            with open(fichero, 'r') as f:
+                datos = f.read().split('#')
+                return int(datos[0]), int(datos[1]), int(datos[2])  # nivel, pantalla, xp
+    return None
+
+def guardar_save(nombre, personaje, nivel, pantalla_max, xp):
+    carpeta = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'saves_heroes_dragones')
+    os.makedirs(carpeta, exist_ok=True)
+    fichero = obtener_nombre_fichero(nombre, personaje)
+    with open(fichero, 'w') as f:
+        f.write(f'{nivel}#{pantalla_max}#{xp}#')
 
 ####################################
 
@@ -592,10 +616,15 @@ def cargar_pantalla(pantalla_actual):
         print('Opción no válida')
 
     if opcion == 's':
+        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla actual
         print(f'¡Hasta pronto {nombre_personaje}!')
         exit()
     if opcion == 'a':
         pantalla_actual += 1
+        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla_actual+1
+
+    if opcion == 'r':
+        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])
 
     tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial = obtener_parametros_pantalla(pantalla_actual)
     princesa_muerta = False
@@ -616,8 +645,10 @@ def cargar_pantalla_derrota():
         print('Opción no válida')
 
     if opcion == 's':
+        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual, heroe['experiencia'])
         print(f'¡Hasta pronto {nombre_personaje}!')
         exit()
+    guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual, heroe['experiencia'])
 
     princesa_muerta = False
     turnos_caos = 0
@@ -721,6 +752,7 @@ princesa_muerta = False
 
 nombre_personaje = input('Introduce tu nombre, héroe: ')
 mi_personaje = selector_de_personaje()
+
 mi_municion = selector_municion()
 turnos_caos = 0
 
@@ -752,7 +784,20 @@ elif mi_personaje in ('🏹', '🧙'):
         aplicar_nivel_arquero()
     elif mi_personaje == '🧙':
         aplicar_nivel_mago()
-        
+save = cargar_save(nombre_personaje, mi_personaje)
+
+if save:
+    nivel_guardado, pantalla_guardada, xp_guardado = save
+    heroe['nivel'] = nivel_guardado
+    heroe['experiencia'] = xp_guardado
+    pantalla_actual = pantalla_guardada
+    tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial = obtener_parametros_pantalla(pantalla_actual)
+    if mi_personaje == '⚔️ ':
+        aplicar_nivel_caballero()
+    elif mi_personaje == '🏹':
+        aplicar_nivel_arquero()
+    elif mi_personaje == '🧙':
+        aplicar_nivel_mago()
 mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
 print('####################################')
