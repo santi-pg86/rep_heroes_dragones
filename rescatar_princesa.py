@@ -1,3 +1,6 @@
+# Rescatar a la Princesa
+# Copyright (C) 2026 Santiago Pérez García
+
 import random
 import os
 
