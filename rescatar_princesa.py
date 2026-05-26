@@ -1,6 +1,9 @@
 import random
 import os
 
+def limpiar_pantalla():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def obtener_nombre_fichero(nombre, personaje):
     tipos = {'⚔️ ': 'caballero', '🏹': 'arquero', '🧙': 'mago'}
     tipo = tipos[personaje]
@@ -815,6 +818,7 @@ print(f'Vamos a rescatar a la princesa.')
 
 cargar_mapa()
 dragones_moviles = selector_dragon_movil()
+limpiar_pantalla()
 mostrar_estado()
 mostrar_mapa()
 
@@ -833,6 +837,7 @@ while True:
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
@@ -844,6 +849,7 @@ while True:
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
@@ -865,6 +871,7 @@ while True:
     elif movimiento.lower() == 'h':
         if heroe['habilidades_especiales'] == 0:
             print('No tienes habilidades especiales disponibles')
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
@@ -887,6 +894,7 @@ while True:
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
@@ -906,6 +914,7 @@ while True:
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
@@ -920,6 +929,7 @@ while True:
     
     if resultado_heroe == 'invalido':
         print('Movimiento no válido')
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -943,6 +953,7 @@ while True:
         pantalla_actual = cargar_pantalla(pantalla_actual)
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -968,6 +979,7 @@ while True:
         cargar_pantalla_derrota()
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -978,11 +990,12 @@ while True:
         cargar_pantalla_derrota()
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
         continue 
-
+    limpiar_pantalla()
     mostrar_estado()
     mostrar_mapa()
     
