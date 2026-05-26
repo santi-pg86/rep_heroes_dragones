@@ -835,6 +835,7 @@ while True:
 
     if movimiento.lower() == 'e':
         if princesa_muerta:
+            limpiar_pantalla()
             mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
@@ -847,6 +848,7 @@ while True:
             continue
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '☠️ ':
+            limpiar_pantalla()
             mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
@@ -858,15 +860,18 @@ while True:
             movimiento = seleccionar_movimiento()
             continue
         elif resultado_dragon == '🪦':
+            limpiar_pantalla()
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
             continue
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -882,16 +887,19 @@ while True:
         habilidad_especial()
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '☠️ ':
+            limpiar_pantalla()
             mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
             cargar_mapa()
             dragones_moviles = selector_dragon_movil()
+            limpiar_pantalla()
             mostrar_estado()
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
             continue
         elif resultado_dragon == '🪦':
+            limpiar_pantalla()
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
@@ -902,6 +910,7 @@ while True:
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
             continue
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -912,6 +921,7 @@ while True:
     if heroe['escudo_activo']:
         resultado_dragon = movimiento_dragon()
         if resultado_dragon == '🪦':
+            limpiar_pantalla()
             mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
             mostrar_mapa()
             cargar_pantalla_derrota()
@@ -922,6 +932,7 @@ while True:
             mostrar_mapa()
             movimiento = seleccionar_movimiento()
             continue
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -939,11 +950,13 @@ while True:
         continue
 
     if resultado_heroe == '☠️ ':
+        limpiar_pantalla()
         mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()  
         cargar_pantalla_derrota()
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -951,6 +964,7 @@ while True:
     elif resultado_heroe == '👸':
         mapa[tamano_mapa - 1][tamano_mapa - 1] = '🏰'
         ganar_xp(100)
+        limpiar_pantalla()
         mostrar_estado('🏰  ¡La princesa ha sido rescatada!', fin_partida=True)
         mostrar_mapa()
         pantalla_actual = cargar_pantalla(pantalla_actual)
@@ -962,11 +976,13 @@ while True:
         movimiento = seleccionar_movimiento()
         continue
     elif resultado_heroe == '🪦':
+        limpiar_pantalla()
         mostrar_estado('🪦 ¡Has matado a la princesa! ☠️ ¡La deshonra caera sobre ti!', fin_partida=True)
         mostrar_mapa()
         cargar_pantalla_derrota()
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
+        limpiar_pantalla()
         mostrar_estado()
         mostrar_mapa()
         movimiento = seleccionar_movimiento()
@@ -977,6 +993,7 @@ while True:
     
 
     if resultado_dragon == '☠️ ':
+        limpiar_pantalla()
         mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
         mostrar_mapa()
         cargar_pantalla_derrota()
@@ -988,6 +1005,7 @@ while True:
         movimiento = seleccionar_movimiento()
         continue
     elif resultado_dragon == '🪦':
+        limpiar_pantalla()
         mostrar_estado('🪦 ¡Los dragones han capturado a la princesa!', fin_partida=True)
         mostrar_mapa()
         cargar_pantalla_derrota()
