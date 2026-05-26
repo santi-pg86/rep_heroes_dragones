@@ -171,7 +171,8 @@ def seleccionar_movimiento():
             else:
                 ataque_E()
         else:
-            ultimo_movimiento = movimiento
+            if movimiento.lower() not in ('e', 'h'):
+                ultimo_movimiento = movimiento
     return movimiento
 
 def selector_municion():
@@ -445,13 +446,26 @@ def disparo_dirigido(fila, columna):
     elif direccion_disparo == 's':
         df, dc = 1, 0
 
+
+
     try:
-        for i in range(2, heroe['distancia_disparo'] + 1):
-            fila_obj = fila + df * i
-            columna_obj = columna + dc * i
-            if fila_obj < 0 or columna_obj < 0:
-                raise IndexError
-            if mapa[fila_obj][columna_obj] in ('🐉', '🐲'):
+        if heroe['nivel'] >= 5:
+            # Primera pasada: matar todos los estáticos en el rango
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                fila_obj = fila + df * i
+                columna_obj = columna + dc * i
+                if fila_obj < 0 or columna_obj < 0:
+                    break
+                if mapa[fila_obj][columna_obj] == '🐉':
+                    drop_municion(False)
+                    ganar_xp(10)
+                    mapa[fila_obj][columna_obj] = '🌲'
+            # Segunda pasada: parar en el primer móvil
+            for i in range(2, heroe['distancia_disparo'] + 1):
+                fila_obj = fila + df * i
+                columna_obj = columna + dc * i
+                if fila_obj < 0 or columna_obj < 0:
+                    break
                 if mapa[fila_obj][columna_obj] == '🐲':
                     for nombre_dragon, datos in dragones_moviles.items():
                         if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
@@ -460,14 +474,30 @@ def disparo_dirigido(fila, columna):
                             ganar_xp(50)
                             break
                     mapa[fila_obj][columna_obj] = '🌲'
-                    break  # los móviles siempre paran la flecha
-                else:
-                    drop_municion(False)
-                    ganar_xp(10)
-                    mapa[fila_obj][columna_obj] = '🌲'
-                    if heroe['nivel'] < 5:
-                        break  # nivel < 5: para en el primer estático
-                    # nivel >= 5: continúa atravesando estáticos
+                    break
+        else:
+            # nivel < 5: comportamiento original
+            for i in range(2, heroe['distancia_disparo'] + 1):
+            
+                fila_obj = fila + df * i
+                columna_obj = columna + dc * i
+                if fila_obj < 0 or columna_obj < 0:
+                    raise IndexError
+                if mapa[fila_obj][columna_obj] in ('🐉', '🐲'):
+                    if mapa[fila_obj][columna_obj] == '🐲':
+                        for nombre_dragon, datos in dragones_moviles.items():
+                            if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
+                                datos['vivo'] = False
+                                drop_municion(True)
+                                ganar_xp(50)
+                                break
+                        mapa[fila_obj][columna_obj] = '🌲'
+                        break
+                    else:
+                        drop_municion(False)
+                        ganar_xp(10)
+                        mapa[fila_obj][columna_obj] = '🌲'
+                        break
     except IndexError:
         pass
 
@@ -671,6 +701,9 @@ elif mi_personaje in ('🏹', '🧙'):
     heroe['distancia_disparo'] = 2
     if mi_personaje == '🏹':
         aplicar_nivel_arquero()
+        heroe['nivel'] = 5  # para testing, quitar después
+        aplicar_nivel_arquero()
+
         
 mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
