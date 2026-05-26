@@ -51,6 +51,7 @@ def comprobar_movimiento(fila, columna):
         elif mapa[fila][columna] in ('🐉', '🐲') and mi_personaje == '⚔️ ' and  heroe['ataques'] > 0:
             es_movil = mapa[fila][columna] == '🐲'
             drop_municion(es_movil)
+            ganar_xp(50 if es_movil else 10)
             mapa[fila][columna] = '⚔️ '
             heroe['ataques'] -= 1
             return mapa[fila][columna]
@@ -125,11 +126,15 @@ def ataque_E():
                     if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
                         datos['vivo'] = False
                         drop_municion(True)
+                        es_movil = mapa[fila][columna] == '🐲'
+                        ganar_xp(50)
+                        
                         break
             else:
                 drop_municion(False)
+                ganar_xp(10)
             mapa[fila_obj][columna_obj] = '🌲'
-
+            
         heroe['ataques'] -= 1
 
     except IndexError:
@@ -390,10 +395,15 @@ def ataque_area_mago(fila, columna):
                         for nombre_dragon, datos in dragones_moviles.items():
                             if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
                                 datos['vivo'] = False
+                                es_movil = mapa[fila][columna] == '🐲'
+                                ganar_xp(50)
                                 drop_municion(False)
                     else:
                         drop_municion(False)
+                        ganar_xp(10)
                     mapa[fila_obj][columna_obj] = '🌲'
+                    
+
     except IndexError:
         pass
 
@@ -435,10 +445,13 @@ def disparo_dirigido(fila, columna):
                         if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
                             datos['vivo'] = False
                             drop_municion(True)
+                            ganar_xp(50)
                             break
                 else:
                     drop_municion(False)
+                    ganar_xp(10)
                 mapa[fila_obj][columna_obj] = '🌲'
+                
                 break
 
     except IndexError:
@@ -460,7 +473,9 @@ def mostrar_estado(mensaje_final=None, fin_partida=False):
         dragones_estaticos = sum(1 for i in range(tamano_mapa) for j in range(tamano_mapa) if mapa[i][j] == '🐉')
         dragones_moviles_vivos = sum(1 for datos in dragones_moviles.values() if datos['vivo'])
         print(f'📍 Pantalla: {pantalla_actual}  🐉 Dragones: {dragones_estaticos}  🐲 Móviles: {dragones_moviles_vivos}')
-        print(f'{mi_personaje}  Ataques disponibles: {max(0, heroe["ataques"])}')
+        print(f'{mi_personaje} Ataques disponibles: {max(0, heroe["ataques"])}')
+        xp_siguiente_nivel = 300 * (2 ** (heroe['nivel'] - 1))
+        print(f'⭐ Nivel: {heroe["nivel"]}  XP: {heroe["experiencia"]}/{xp_siguiente_nivel}')
         if heroe['habilidades_especiales'] > 0:
             if mi_personaje == '⚔️ ':
                 print(f'✨ Habilidad especial disponible: {ataque_especial} (radio taunt: {heroe["radio_taunt"]})')
@@ -498,7 +513,7 @@ def obtener_parametros_pantalla(pantalla):
     return tamano, dragones, moviles, municion
 
 def cargar_pantalla(pantalla_actual):
-    global princesa_muerta, turnos_caos, tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial, mapa
+    global princesa_muerta, turnos_caos, tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial, mapa,ultimo_movimiento
 
     while (opcion := input('¿Quieres avanzar a la siguiente pantalla (A), repetir esta (R) o salir (S)? ').lower()) not in ('a', 'r', 's'):
         print('Opción no válida')
@@ -512,6 +527,7 @@ def cargar_pantalla(pantalla_actual):
     tamano_mapa, num_dragones, max_dragones_moviles, municion_inicial = obtener_parametros_pantalla(pantalla_actual)
     princesa_muerta = False
     turnos_caos = 0
+    ultimo_movimiento = 'd'
     heroe['ataques'] = 3
     heroe['habilidades_especiales'] = max_habilidades
     if mi_personaje == '⚔️ ':
@@ -521,7 +537,7 @@ def cargar_pantalla(pantalla_actual):
     return pantalla_actual
 
 def cargar_pantalla_derrota():
-    global princesa_muerta, turnos_caos, mapa
+    global princesa_muerta, turnos_caos, mapa, ultimo_movimiento
 
     while (opcion := input('¿Quieres intentarlo de nuevo (R) o salir (S)? ').lower()) not in ('r', 's'):
         print('Opción no válida')
@@ -532,12 +548,19 @@ def cargar_pantalla_derrota():
 
     princesa_muerta = False
     turnos_caos = 0
+    ultimo_movimiento = 'd'
     heroe['ataques'] = 3
     heroe['habilidades_especiales'] = max_habilidades
     if mi_personaje == '⚔️ ':
         heroe['escudo_activo'] = False
     mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
+def ganar_xp(cantidad):
+    heroe['experiencia'] += cantidad
+    xp_siguiente_nivel = 300 * (2 ** (heroe['nivel'] - 1))
+    if heroe['experiencia'] >= xp_siguiente_nivel:
+        heroe['nivel'] += 1
+        print(f'🎉 ¡Subiste al nivel {heroe["nivel"]}!')
 ################################
 
 lista_personajes = ('⚔️ ','🏹','🧙')
@@ -710,7 +733,7 @@ while True:
 
     if resultado_heroe == '☠️ ':
         mostrar_estado('☠️  ¡El héroe ha perdido!', fin_partida=True)
-        mostrar_mapa()
+        mostrar_mapa()  
         cargar_pantalla_derrota()
         cargar_mapa()
         dragones_moviles = selector_dragon_movil()
@@ -720,6 +743,7 @@ while True:
         continue
     elif resultado_heroe == '👸':
         mapa[tamano_mapa - 1][tamano_mapa - 1] = '🏰'
+        ganar_xp(100)
         mostrar_estado('🏰  ¡La princesa ha sido rescatada!', fin_partida=True)
         mostrar_mapa()
         pantalla_actual = cargar_pantalla(pantalla_actual)
