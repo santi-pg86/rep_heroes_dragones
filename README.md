@@ -48,16 +48,17 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 ## ⚡ Habilidades Especiales
 
 ### ⚔️ Caballero - Escudo
-Activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo:
-- Los dragones móviles cercanos son atraídos hacia él (taunt, radio 4).
+Activa un escudo que absorbe varios impactos de dragón según el nivel. Mientras está activo:
+- Los dragones móviles cercanos son atraídos hacia él (taunt).
 - El caballero permanece inmóvil.
-- El escudo se desactiva al matar al primer dragón que llega.
+- El escudo se desactiva al absorber el número máximo de dragones del nivel.
+- A partir del nivel 5, antes de activar el escudo elimina automáticamente todos los dragones estáticos en un radio de 2 casillas.
 
 ### 🏹 Arquero - Disparo dirigido
-Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Distancia mínima: 2 casillas.
+Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino. Distancia mínima: 2 casillas.
 
 ### 🧙 Mago - El Pacto del Caos
-Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa. Úsalo con cabeza... o perderás todo lo que acabas de ganar.
+Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa.
 
 ## 💎 Sistema de Drop
 Al matar activamente a un dragón existe una probabilidad de que aparezca munición en el mapa.
@@ -73,15 +74,30 @@ Al matar activamente a un dragón existe una probabilidad de que aparezca munici
 | Matar dragón móvil 🐲 | 50 XP |
 | Rescatar a la princesa 👸 | 100 XP |
 
-La experiencia y el nivel se mantienen entre pantallas. Repite pantallas para farmear XP antes de avanzar.
+La experiencia y el nivel se mantienen entre pantallas. Nivel máximo: 10.
+
+## ⚔️ Niveles del Caballero
+
+| Nivel | Ataques | Radio taunt | Dragones absorbidos | Habilidades | Bonus |
+|---|---|---|---|---|---|
+| 1 | 3 | 4 | 1 | 1 | - |
+| 2 | 3 | 4 | 3 | 1 | - |
+| 3 | 3 | 5 | 5 | 1 | - |
+| 4 | 3 | 5 | 7 | 1 | - |
+| 5 | 3 | 5 | 9 | 1 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 6 | 4 | 5 | 9 | 2 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 7 | 5 | 5 | 9 | 2 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 8 | 6 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 9 | 7 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 10 | 8 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
 
 ## 📊 Panel de Estado
 Antes de cada turno se muestra un panel con:
 - Pantalla actual y número de dragones estáticos y móviles.
 - Ataques disponibles.
 - Nivel y XP actual / XP para siguiente nivel.
-- Habilidad especial disponible con radio de acción.
-- Escudo activo (caballero).
+- Habilidad especial disponible con radio, dragones absorbibles y usos disponibles.
+- Escudo activo con dragones restantes por absorber (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
 
 ## 🚀 Ejecución
