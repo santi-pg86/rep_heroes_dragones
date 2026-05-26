@@ -152,3 +152,8 @@ Antes de cada turno se muestra un panel con:
 ```
 python rescatar_princesa.py
 ```
+## 📄 Licencia
+Copyright (C) 2026 Santiago Pérez García
+
+Este programa se distribuye bajo la licencia **GNU General Public License v3.0**.
+Ver el fichero [LICENSE](LICENSE) para más detalles.
