@@ -49,12 +49,12 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 
 ### ⚔️ Caballero - Escudo
 Activa un escudo que lo hace inmune al siguiente ataque de dragón. Mientras está activo:
-- Los dragones móviles cercanos son atraídos hacia él (taunt).
+- Los dragones móviles cercanos son atraídos hacia él (taunt, radio 4).
 - El caballero permanece inmóvil.
 - El escudo se desactiva al matar al primer dragón que llega.
 
 ### 🏹 Arquero - Disparo dirigido
-Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Las municiones no son obstáculo. Distancia mínima: 2 casillas.
+Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino o alcanzar la distancia máxima. Distancia mínima: 2 casillas.
 
 ### 🧙 Mago - El Pacto del Caos
 Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa. Úsalo con cabeza... o perderás todo lo que acabas de ganar.
@@ -65,10 +65,21 @@ Al matar activamente a un dragón existe una probabilidad de que aparezca munici
 - Los dragones móviles 🐲 tienen mayor probabilidad de drop que los estáticos 🐉.
 - La cantidad máxima de munición en el mapa depende del número de dragones móviles vivos.
 
+## ⭐ Sistema de XP y Niveles
+
+| Acción | XP |
+|---|---|
+| Matar dragón estático 🐉 | 10 XP |
+| Matar dragón móvil 🐲 | 50 XP |
+| Rescatar a la princesa 👸 | 100 XP |
+
+La experiencia y el nivel se mantienen entre pantallas. Repite pantallas para farmear XP antes de avanzar.
+
 ## 📊 Panel de Estado
 Antes de cada turno se muestra un panel con:
 - Pantalla actual y número de dragones estáticos y móviles.
 - Ataques disponibles.
+- Nivel y XP actual / XP para siguiente nivel.
 - Habilidad especial disponible con radio de acción.
 - Escudo activo (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
