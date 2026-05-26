@@ -214,7 +214,9 @@ def comprobar_movimiento_dragon(fila_dragon, columna_dragon):
     elif mapa[fila_dragon][columna_dragon]  in (mi_personaje, '🛡️ '):
         if heroe['escudo_activo']:  # Escudo activo: el dragón muere siempre
             mapa[fila_dragon][columna_dragon] = mi_personaje
-            heroe['escudo_activo'] = False
+            heroe['max_dragones_atraidos'] -= 1
+            if heroe['max_dragones_atraidos'] <= 0:
+                heroe['escudo_activo'] = False
             return 'dragon_muerto'
         elif heroe['ataques'] > 0:
             mapa[fila_dragon][columna_dragon] = mi_personaje
@@ -364,8 +366,17 @@ def habilidad_especial():
 
     if mi_personaje == '⚔️ ':
         if heroe['habilidades_especiales'] > 0:
-            heroe['escudo_activo'] = True
             filaHeroe, ColumnaHeroe = buscar_caballero()
+            if heroe['nivel'] >= 5:
+                for df, dc in [(0,1),(0,-1),(1,0),(-1,0),(0,2),(0,-2),(2,0),(-2,0)]:
+                    fila_obj, columna_obj = filaHeroe + df, columnaHeroe + dc
+                    if 0 <= fila_obj < tamano_mapa and 0 <= columna_obj < tamano_mapa:
+                        if mapa[fila_obj][columna_obj] == '🐉':
+                            ganar_xp(10)
+                            drop_municion(False)
+                            mapa[fila_obj][columna_obj] = '🌲'
+            heroe['max_dragones_atraidos'] = heroe['max_dragones_atraidos_nivel']
+            heroe['escudo_activo'] = True
             mapa[filaHeroe][ColumnaHeroe] = '🛡️ '
             heroe['habilidades_especiales'] -= 1
     elif mi_personaje == '🏹':
@@ -478,11 +489,13 @@ def mostrar_estado(mensaje_final=None, fin_partida=False):
         print(f'⭐ Nivel: {heroe["nivel"]}  XP: {heroe["experiencia"]}/{xp_siguiente_nivel}')
         if heroe['habilidades_especiales'] > 0:
             if mi_personaje == '⚔️ ':
-                print(f'✨ Habilidad especial disponible: {ataque_especial} (radio taunt: {heroe["radio_taunt"]})')
+                print(f'✨ Habilidad especial disponible: {ataque_especial} x{heroe["habilidades_especiales"]} (Radio: {heroe["radio_taunt"]}, Dragones: {heroe["max_dragones_atraidos_nivel"]})')
+                if heroe['nivel'] >= 5:
+                    print(f'💥 Bonus: Elimina dragones estáticos en radio 2 antes de activar el escudo')
             else:
-                print(f'✨ Habilidad especial disponible: {ataque_especial} (radio: {heroe["distancia_disparo"]})')
+                print(f'✨ Habilidad especial disponible: {ataque_especial} x{heroe["habilidades_especiales"]} (radio: {heroe["distancia_disparo"]})')
         if mi_personaje == '⚔️ ' and heroe['escudo_activo']:
-            print(f'🛡️  Escudo activo - Inmóvil, esperando dragones')
+            print(f'🛡️  Escudo activo - Inmóvil, esperando dragones ({heroe["max_dragones_atraidos"]} restantes)')
         if mi_personaje == '🧙' and turnos_caos > 0:
             print(f'⚡ PACTO DEL CAOS activo. Turnos restantes: {turnos_caos}')
     if mensaje_final:
@@ -561,6 +574,29 @@ def ganar_xp(cantidad):
     if heroe['experiencia'] >= xp_siguiente_nivel:
         heroe['nivel'] += 1
         print(f'🎉 ¡Subiste al nivel {heroe["nivel"]}!')
+        if mi_personaje == '⚔️ ':
+            aplicar_nivel_caballero()
+
+def aplicar_nivel_caballero():
+    nivel = heroe['nivel']
+    niveles = {
+        1:  (3, 4, 1, 1),
+        2:  (3, 4, 3, 1),
+        3:  (3, 5, 5, 1),
+        4:  (3, 5, 7, 1),
+        5:  (3, 5, 9, 1),
+        6:  (4, 5, 9, 2),
+        7:  (5, 5, 9, 2),
+        8:  (6, 5, 9, 3),
+        9:  (7, 5, 9, 3),
+        10: (8, 5, 9, 3),
+    }
+    ataques, radio, max_atraidos, habilidades = niveles[min(nivel, 10)]
+    heroe['ataques'] = ataques
+    heroe['radio_taunt'] = radio
+    heroe['max_dragones_atraidos'] = max_atraidos
+    heroe['max_dragones_atraidos_nivel'] = max_atraidos  # valor máximo del nivel
+    heroe['habilidades_especiales'] = habilidades
 ################################
 
 lista_personajes = ('⚔️ ','🏹','🧙')
@@ -598,9 +634,12 @@ heroe = {
     'distancia_disparo': None
 }
 
+
+
 if mi_personaje == '⚔️ ':
     heroe['escudo_activo'] = False
     heroe['radio_taunt'] = 4
+    aplicar_nivel_caballero()
 elif mi_personaje in ('🏹', '🧙'):
     heroe['distancia_disparo'] = 2
         
