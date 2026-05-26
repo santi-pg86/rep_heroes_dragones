@@ -394,29 +394,49 @@ def habilidad_especial():
 
 def ataque_area_mago(fila, columna):
     global turnos_caos
-    turnos_caos = 3
     
-    offsets = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # izquierda, derecha, arriba, abajo
-    
+    # Bonus nivel 5+: cada dragón móvil elimina estáticos en radio
+    dragones_eliminados_bonus = 0
+    if heroe['nivel'] >= 5:
+        radio_bonus = min(2 * heroe['ataques'], 10)
+        for datos in dragones_moviles.values():
+            if datos['vivo']:
+                fila_d, col_d = datos['fila'], datos['columna']
+                for df, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+                    for r in range(1, radio_bonus + 1):
+                        fila_obj = fila_d + df * r
+                        col_obj = col_d + dc * r
+                        if 0 <= fila_obj < tamano_mapa and 0 <= col_obj < tamano_mapa:
+                            if mapa[fila_obj][col_obj] == '🐉':
+                                ganar_xp(10)
+                                drop_municion(False)
+                                mapa[fila_obj][col_obj] = '🌲'
+                                dragones_eliminados_bonus += 1
+
+    turnos_caos = heroe['turnos_caos_nivel']
+    turnos_caos = max(0, turnos_caos - (dragones_eliminados_bonus // 4))
+    heroe['ataques'] = 0
+
+    # Explosión en cruz normal
+    offsets = [(0, -1), (0, 1), (-1, 0), (1, 0)]
     try:
         for df, dc in offsets:
             for i in range(heroe['distancia_disparo'] + 1):
                 fila_obj = fila + df * i
                 columna_obj = columna + dc * i
+                if fila_obj < 0 or columna_obj < 0:  # añadir esta línea
+                    break 
                 if mapa[fila_obj][columna_obj] in ('🐉', '🐲'):
                     if mapa[fila_obj][columna_obj] == '🐲':
-                        for nombre_dragon, datos in dragones_moviles.items():
+                         for nombre_dragon, datos in dragones_moviles.items():
                             if datos['fila'] == fila_obj and datos['columna'] == columna_obj:
                                 datos['vivo'] = False
-                                es_movil = mapa[fila][columna] == '🐲'
                                 ganar_xp(50)
                                 drop_municion(False)
                     else:
                         drop_municion(False)
                         ganar_xp(10)
                     mapa[fila_obj][columna_obj] = '🌲'
-                    
-
     except IndexError:
         pass
 
@@ -525,10 +545,15 @@ def mostrar_estado(mensaje_final=None, fin_partida=False):
                 print(f'✨ Habilidad especial disponible: {ataque_especial} x{heroe["habilidades_especiales"]} (Radio: {heroe["radio_taunt"]}, Dragones: {heroe["max_dragones_atraidos_nivel"]})')
                 if heroe['nivel'] >= 5:
                     print(f'💥 Bonus: Elimina dragones estáticos en radio 2 antes de activar el escudo')
-            else:
+            elif mi_personaje == '🏹':
                 print(f'🏹 Ataque E: distancia {heroe["distancia_disparo_E"]}  ✨ Habilidad: {ataque_especial} x{heroe["habilidades_especiales"]} (radio: {heroe["distancia_disparo"]})')
-                if mi_personaje == '🏹' and heroe['nivel'] >= 5:
+                if heroe['nivel'] >= 5:
                     print(f'💥 Bonus: La flecha mata a todos los dragones estáticos en el rango')
+            elif mi_personaje == '🧙':
+                print(f'🧙 Ataque E: distancia {heroe["distancia_disparo_E"]}  ✨ Habilidad: {ataque_especial} x{heroe["habilidades_especiales"]} (radio: {heroe["distancia_disparo"]})')
+                if heroe['nivel'] >= 5:
+                    radio_bonus = min(2 * heroe['ataques'], 10)
+                    print(f'💥 Bonus: Elimina estáticos en radio {radio_bonus} alrededor de cada dragón móvil (-1 turno caos por cada 4 eliminados)')
         if mi_personaje == '⚔️ ' and heroe['escudo_activo']:
             print(f'🛡️  Escudo activo - Inmóvil, esperando dragones ({heroe["max_dragones_atraidos"]} restantes)')
         if mi_personaje == '🧙' and turnos_caos > 0:
@@ -613,6 +638,8 @@ def ganar_xp(cantidad):
             aplicar_nivel_caballero()
         if mi_personaje == '🏹':
             aplicar_nivel_arquero()
+        if mi_personaje == '🧙':
+            aplicar_nivel_mago()
 
 def aplicar_nivel_caballero():
     nivel = heroe['nivel']
@@ -654,6 +681,28 @@ def aplicar_nivel_arquero():
     heroe['distancia_disparo_E'] = dist_e
     heroe['distancia_disparo'] = dist_h
     heroe['habilidades_especiales'] = habilidades
+
+def aplicar_nivel_mago():
+    nivel = heroe['nivel']
+    niveles = {
+        1:  (3, 2, 2, 1, 3),
+        2:  (3, 3, 3, 1, 3),
+        3:  (3, 3, 4, 1, 3),
+        4:  (3, 3, 4, 1, 3),
+        5:  (3, 4, 5, 1, 3),
+        6:  (4, 4, 5, 2, 4),
+        7:  (5, 4, 5, 2, 5),
+        8:  (6, 4, 5, 3, 6),
+        9:  (7, 4, 5, 3, 7),
+        10: (8, 4, 5, 3, 8),
+    }
+    ataques, dist_e, radio_h, habilidades, turnos = niveles[min(nivel, 10)]
+    heroe['ataques'] = ataques
+    heroe['distancia_disparo_E'] = dist_e
+    heroe['distancia_disparo'] = radio_h
+    heroe['habilidades_especiales'] = habilidades
+    heroe['turnos_caos_nivel'] = turnos
+
 ################################
 
 lista_personajes = ('⚔️ ','🏹','🧙')
@@ -701,9 +750,8 @@ elif mi_personaje in ('🏹', '🧙'):
     heroe['distancia_disparo'] = 2
     if mi_personaje == '🏹':
         aplicar_nivel_arquero()
-        heroe['nivel'] = 5  # para testing, quitar después
-        aplicar_nivel_arquero()
-
+    elif mi_personaje == '🧙':
+        aplicar_nivel_mago()
         
 mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 
