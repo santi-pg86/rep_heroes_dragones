@@ -5,6 +5,11 @@ Juego de aventuras en consola desarrollado en Python.
 ## 🎮 Descripción
 El héroe debe atravesar un mapa lleno de dragones para rescatar a la princesa. Elige tu personaje, introduce tu nombre y ¡a aventurarse! Cada vez que rescates a la princesa podrás avanzar a una pantalla más difícil o repetir la actual para ganar experiencia.
 
+## 💾 Sistema de Guardado
+La partida se guarda automáticamente cada vez que rescatas a la princesa (al elegir avanzar, repetir o salir) y también cuando el héroe muere o la princesa es capturada. Los datos guardados son el nivel del héroe, la XP acumulada y la pantalla actual.
+
+Al iniciar el juego, si existe una partida guardada para ese nombre y clase de héroe, se pregunta si se desea cargar. Los ficheros de guardado se almacenan en la carpeta `saves_heroes_dragones` con el formato `<nombre>_<clase>.txt`.
+
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
 - 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar en la dirección del último movimiento. Usa **H** para el disparo dirigido.
