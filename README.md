@@ -144,3 +144,6 @@ Antes de cada turno se muestra un panel con:
 - Pacto del Caos activo y turnos restantes (mago).
 
 ## 🚀 Ejecución
+```
+python rescatar_princesa.py
+```
