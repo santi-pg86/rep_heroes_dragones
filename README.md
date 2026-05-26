@@ -7,7 +7,7 @@ El héroe debe atravesar un mapa lleno de dragones para rescatar a la princesa. 
 
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
-- 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar dos casillas en la dirección del último movimiento. Gasta un ataque aunque falle.
+- 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar en la dirección del último movimiento. Usa **H** para el disparo dirigido.
 - 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Ataca a distancia con **E** y desata una explosión caótica en área con **H**... pero cuidado, el poder tiene un precio.
 
 ## 🗺️ Progresión de Pantallas
@@ -55,7 +55,13 @@ Activa un escudo que absorbe varios impactos de dragón según el nivel. Mientra
 - A partir del nivel 5, antes de activar el escudo elimina automáticamente todos los dragones estáticos en un radio de 2 casillas.
 
 ### 🏹 Arquero - Disparo dirigido
-Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. La flecha viaja en línea recta hasta impactar con el primer dragón en su camino. Distancia mínima: 2 casillas.
+Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. Distancia mínima: 2 casillas.
+
+**Nivel 5+:** El disparo dirigido realiza dos pasadas:
+1. **Primera pasada**: mata a todos los dragones estáticos en el rango completo.
+2. **Segunda pasada**: para en el primer dragón móvil encontrado en el rango.
+
+Los dragones móviles siempre detienen la flecha; los estáticos solo la detienen por debajo del nivel 5.
 
 ### 🧙 Mago - El Pacto del Caos
 Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los **3 turnos siguientes** todos los dragones móviles se dirigen directamente hacia la princesa.
@@ -91,12 +97,29 @@ La experiencia y el nivel se mantienen entre pantallas. Nivel máximo: 10.
 | 9 | 7 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
 | 10 | 8 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
 
+## 🏹 Niveles del Arquero
+
+| Nivel | Ataques | Dist E | Dist H | Habilidades | Bonus |
+|---|---|---|---|---|---|
+| 1 | 3 | 2 | 2 | 1 | - |
+| 2 | 3 | 3 | 4 | 1 | - |
+| 3 | 3 | 3 | 5 | 1 | - |
+| 4 | 3 | 3 | 5 | 1 | - |
+| 5 | 3 | 4 | 5 | 1 | La flecha mata a todos los dragones estáticos en el rango |
+| 6 | 4 | 4 | 5 | 2 | La flecha mata a todos los dragones estáticos en el rango |
+| 7 | 5 | 4 | 5 | 2 | La flecha mata a todos los dragones estáticos en el rango |
+| 8 | 6 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
+| 9 | 7 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
+| 10 | 8 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
+
 ## 📊 Panel de Estado
 Antes de cada turno se muestra un panel con:
 - Pantalla actual y número de dragones estáticos y móviles.
 - Ataques disponibles.
 - Nivel y XP actual / XP para siguiente nivel.
-- Habilidad especial disponible con radio, dragones absorbibles y usos disponibles.
+- Caballero: habilidad con radio taunt, dragones absorbibles, usos disponibles y bonus si nivel ≥ 5.
+- Arquero: distancia ataque E, habilidad con radio H, usos disponibles y bonus si nivel ≥ 5.
+- Mago: habilidad con radio y usos disponibles.
 - Escudo activo con dragones restantes por absorber (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
 
