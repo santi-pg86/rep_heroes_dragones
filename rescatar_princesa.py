@@ -947,13 +947,13 @@ mapa = [['🌲'] * tamano_mapa for _ in range(tamano_mapa)]
 print('####################################')
 if mi_personaje == '⚔️ ':
     print(f'Bienvenido {mi_personaje} caballero {nombre_personaje}.')
-    ataque_especial = 'Escudo'
+    ataque_especial = 'Escudo Desafiante'
 if mi_personaje == '🏹':
     print(f'Bienvenido {mi_personaje} arquero {nombre_personaje}.')
     ataque_especial = 'Disparo Invocador'
 if mi_personaje == '🧙':
     print(f'Bienvenido {mi_personaje} mago {nombre_personaje}.')
-    ataque_especial = 'Explosión caótica'
+    ataque_especial = 'Explosión Caótica'
 
 print(f'Vamos a rescatar a la princesa.')
 
