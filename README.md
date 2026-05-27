@@ -12,7 +12,7 @@ Al iniciar el juego, si existe una partida guardada para ese nombre y clase de h
 
 ## 👾 Personajes
 - ⚔️ **Caballero**: luchador cuerpo a cuerpo. Pasa por encima de un dragón para derrotarlo. Gasta un ataque por dragón.
-- 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar en la dirección del último movimiento. Usa **H** para el disparo dirigido.
+- 🏹 **Arquero**: luchador a distancia. Usa la tecla **E** para disparar en la dirección del último movimiento. Usa **H** para invocar lobos aliados.
 - 🧙 **Mago** *(DLC "El Pacto del Caos")*: el más poderoso de los tres héroes. Ataca a distancia con **E** y desata una explosión caótica en área con **H**... pero cuidado, el poder tiene un precio.
 
 ## 🗺️ Progresión de Pantallas
@@ -58,16 +58,17 @@ Activa un escudo que absorbe varios impactos de dragón según el nivel. Mientra
 - El caballero permanece inmóvil.
 - El escudo se desactiva al absorber el número máximo de dragones del nivel.
 - El escudo también se desactiva automáticamente si no quedan dragones móviles en el mapa.
-- **Nivel 5+**: antes de activar el escudo elimina automáticamente los dragones estáticos en un radio de `min(ataques, 10)` casillas. Por cada estático eliminado, el escudo puede absorber 1 dragón adicional.
+- **Nivel 5+**: antes de activar el escudo elimina automáticamente los dragones estáticos en un radio de `min(ataques, 10)` casillas (horizontal y vertical). Por cada estático eliminado, el escudo puede absorber 1 dragón adicional.
 
-### 🏹 Arquero - Disparo dirigido
-Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. Distancia mínima: 2 casillas.
+### 🏹 Arquero - Disparo Invocador
+Elimina los dragones móviles que estén en la misma fila o columna del héroe dentro del radio de la habilidad.
 
-**Nivel 5+:** El disparo dirigido realiza dos pasadas:
-1. **Primera pasada**: mata a todos los dragones estáticos en el rango completo.
-2. **Segunda pasada**: para en el primer dragón móvil encontrado en el rango.
-
-Los dragones móviles siempre detienen la flecha; los estáticos solo la detienen por debajo del nivel 5.
+**Nivel 5+:** Además elimina los dragones móviles en la misma fila o columna de la princesa, e invoca un 🐺 lobo en cada casilla liberada. Los lobos se mueven aleatoriamente cada turno y:
+- Al encontrar un dragón (estático o móvil) → ambos mueren, el héroe gana XP.
+- Al encontrar munición → +1 ataque al héroe, el lobo desaparece.
+- Si no pueden moverse → desaparecen.
+- No pueden moverse a la casilla del héroe ni de la princesa.
+- Un lobo aliado bloquea el paso del héroe.
 
 ### 🧙 Mago - El Pacto del Caos
 Lanza un ataque en área en forma de cruz que mata a **todos** los dragones dentro del radio, sin distancia mínima. Sin embargo, durante los turnos siguientes todos los dragones móviles se dirigen directamente hacia la princesa.
@@ -112,16 +113,16 @@ La experiencia y el nivel se mantienen entre pantallas. Nivel máximo: 10.
 
 | Nivel | Ataques | Dist E | Dist H | Habilidades | Bonus |
 |---|---|---|---|---|---|
-| 1 | 3 | 2 | 2 | 1 | - |
-| 2 | 3 | 3 | 4 | 1 | - |
-| 3 | 3 | 3 | 5 | 1 | - |
-| 4 | 3 | 3 | 5 | 1 | - |
-| 5 | 3 | 4 | 5 | 1 | La flecha mata a todos los dragones estáticos en el rango |
-| 6 | 4 | 4 | 5 | 2 | La flecha mata a todos los dragones estáticos en el rango |
-| 7 | 5 | 4 | 5 | 2 | La flecha mata a todos los dragones estáticos en el rango |
-| 8 | 6 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
-| 9 | 7 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
-| 10 | 8 | 4 | 5 | 3 | La flecha mata a todos los dragones estáticos en el rango |
+| 1 | 3 | 3 | 3 | 1 | - |
+| 2 | 3 | 3 | 3 | 1 | - |
+| 3 | 3 | 4 | 4 | 1 | - |
+| 4 | 3 | 4 | 4 | 1 | - |
+| 5 | 3 | 5 | 5 | 1 | Invoca 🐺 lobos también en radio de la princesa |
+| 6 | 4 | 6 | 6 | 2 | Invoca 🐺 lobos también en radio de la princesa |
+| 7 | 5 | 7 | 7 | 2 | Invoca 🐺 lobos también en radio de la princesa |
+| 8 | 6 | 8 | 8 | 3 | Invoca 🐺 lobos también en radio de la princesa |
+| 9 | 7 | 9 | 9 | 3 | Invoca 🐺 lobos también en radio de la princesa |
+| 10 | 8 | 10 | 10 | 3 | Invoca 🐺 lobos también en radio de la princesa |
 
 ## 🧙 Niveles del Mago
 
