@@ -917,6 +917,7 @@ heroe = {
 }
 
 
+invocaciones = []
 
 if mi_personaje == '⚔️ ':
     heroe['escudo_activo'] = False
@@ -924,7 +925,7 @@ if mi_personaje == '⚔️ ':
 elif mi_personaje in ('🏹', '🧙'):
     if mi_personaje == '🏹':
         aplicar_nivel_arquero()
-        invocaciones = []
+        
     elif mi_personaje == '🧙':
         aplicar_nivel_mago()
 save = cargar_save(nombre_personaje, mi_personaje)
