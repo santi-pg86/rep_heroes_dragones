@@ -196,12 +196,18 @@ def seleccionar_movimiento():
     global ultimo_movimiento
 
     if mi_personaje == '⚔️ ':
-        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), H (Habilidad Especial): ')
+        movimiento = input('W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), H (Habilidad Especial), X (Salir): ')
     elif mi_personaje in ('🏹','🧙'):
         direcciones_texto = {'w': 'ARRIBA', 's': 'ABAJO', 'a': 'IZQUIERDA', 'd': 'DERECHA'}
         dir_texto = direcciones_texto.get(ultimo_movimiento.lower(), 'DERECHA')
-        movimiento = input(f'W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE {dir_texto}), H (Habilidad Especial): ')
-    
+        movimiento = input(f'W (ARRIBA), S (ABAJO), A (IZQUIERDA), D (DERECHA), E (ATAQUE {dir_texto}), H (Habilidad Especial), X (Salir): ')
+
+        if movimiento.lower() == 'x':
+            if input("Pulsa x para confirmar: ").lower() == "x":
+                guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla actual
+                print(f'¡Hasta pronto {nombre_personaje}!')
+                exit()
+
         if movimiento.lower() == 'e':
             if heroe['ataques'] <= 0:
                 print('No tienes ataques disponibles')
@@ -663,9 +669,10 @@ def cargar_pantalla(pantalla_actual):
         print('Opción no válida')
 
     if opcion == 's':
-        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla actual
-        print(f'¡Hasta pronto {nombre_personaje}!')
-        exit()
+        if input("Pulsa x para confirmar: ").lower() == "x":
+            guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla actual
+            print(f'¡Hasta pronto {nombre_personaje}!')
+            exit()
     if opcion == 'a':
         pantalla_actual += 1
         guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla_actual+1
@@ -692,9 +699,10 @@ def cargar_pantalla_derrota():
         print('Opción no válida')
 
     if opcion == 's':
-        guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual, heroe['experiencia'])
-        print(f'¡Hasta pronto {nombre_personaje}!')
-        exit()
+        if input("Pulsa x para confirmar: ").lower() == "x":
+            guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual,heroe['experiencia'])  # guarda pantalla actual
+            print(f'¡Hasta pronto {nombre_personaje}!')
+            exit()
     guardar_save(nombre_personaje, mi_personaje, heroe['nivel'], pantalla_actual, heroe['experiencia'])
 
     princesa_muerta = False
