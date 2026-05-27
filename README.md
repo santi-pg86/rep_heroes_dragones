@@ -52,7 +52,7 @@ Además de los dragones estáticos, hay dragones móviles que se mueven por el m
 
 ## ⚡ Habilidades Especiales
 
-### ⚔️ Caballero - Escudo
+### ⚔️ Caballero - Escudo Desafiante
 Activa un escudo que absorbe varios impactos de dragón según el nivel. Mientras está activo:
 - Los dragones móviles cercanos son atraídos hacia él (taunt).
 - El caballero permanece inmóvil.
