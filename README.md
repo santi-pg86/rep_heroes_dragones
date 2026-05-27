@@ -57,7 +57,8 @@ Activa un escudo que absorbe varios impactos de dragón según el nivel. Mientra
 - Los dragones móviles cercanos son atraídos hacia él (taunt).
 - El caballero permanece inmóvil.
 - El escudo se desactiva al absorber el número máximo de dragones del nivel.
-- A partir del nivel 5, antes de activar el escudo elimina automáticamente todos los dragones estáticos en un radio de 2 casillas.
+- El escudo también se desactiva automáticamente si no quedan dragones móviles en el mapa.
+- **Nivel 5+**: antes de activar el escudo elimina automáticamente los dragones estáticos en un radio de `min(ataques, 10)` casillas. Por cada estático eliminado, el escudo puede absorber 1 dragón adicional.
 
 ### 🏹 Arquero - Disparo dirigido
 Permite seleccionar libremente la dirección del disparo, independientemente del último movimiento. Distancia mínima: 2 casillas.
@@ -100,12 +101,12 @@ La experiencia y el nivel se mantienen entre pantallas. Nivel máximo: 10.
 | 2 | 3 | 4 | 3 | 1 | - |
 | 3 | 3 | 5 | 5 | 1 | - |
 | 4 | 3 | 5 | 7 | 1 | - |
-| 5 | 3 | 5 | 9 | 1 | Elimina dragones estáticos en radio 2 al activar escudo |
-| 6 | 4 | 5 | 9 | 2 | Elimina dragones estáticos en radio 2 al activar escudo |
-| 7 | 5 | 5 | 9 | 2 | Elimina dragones estáticos en radio 2 al activar escudo |
-| 8 | 6 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
-| 9 | 7 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
-| 10 | 8 | 5 | 9 | 3 | Elimina dragones estáticos en radio 2 al activar escudo |
+| 5 | 3 | 5 | 9 | 1 | Radio min(ataques,10), +1 absorbible por estático eliminado |
+| 6 | 4 | 5 | 9 | 2 | Radio min(ataques,10), +1 absorbible por estático eliminado |
+| 7 | 5 | 5 | 9 | 2 | Radio min(ataques,10), +1 absorbible por estático eliminado |
+| 8 | 6 | 5 | 9 | 3 | Radio min(ataques,10), +1 absorbible por estático eliminado |
+| 9 | 7 | 5 | 9 | 3 | Radio min(ataques,10), +1 absorbible por estático eliminado |
+| 10 | 8 | 5 | 9 | 3 | Radio min(ataques,10), +1 absorbible por estático eliminado |
 
 ## 🏹 Niveles del Arquero
 
@@ -148,12 +149,13 @@ Antes de cada turno se muestra un panel con:
 - Escudo activo con dragones restantes por absorber (caballero).
 - Pacto del Caos activo y turnos restantes (mago).
 
-## 🚀 Ejecución
-```
-python rescatar_princesa.py
-```
 ## 📄 Licencia
 Copyright (C) 2026 Santiago Pérez García
 
 Este programa se distribuye bajo la licencia **GNU General Public License v3.0**.
 Ver el fichero [LICENSE](LICENSE) para más detalles.
+
+## 🚀 Ejecución
+```
+python rescatar_princesa.py
+```
